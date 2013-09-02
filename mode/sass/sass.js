@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("sass", function(config) {
   var tokenRegexp = function(words){
     return new RegExp("^" + words.join("|"));
@@ -328,3 +329,4 @@ CodeMirror.defineMode("sass", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-sass", "sass");
+});

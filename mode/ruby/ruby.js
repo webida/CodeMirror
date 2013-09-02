@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("ruby", function(config) {
   function wordObj(words) {
     var o = {};
@@ -245,3 +246,4 @@ CodeMirror.defineMode("ruby", function(config) {
 
 CodeMirror.defineMIME("text/x-ruby", "ruby");
 
+});

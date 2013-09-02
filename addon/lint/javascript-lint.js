@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
 
   var bogus = [ "Dangerous comment" ];
@@ -122,3 +123,4 @@
     }
   }
 })();
+});

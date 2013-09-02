@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("htmlembedded", function(config, parserConfig) {
 
   //config settings
@@ -71,3 +72,4 @@ CodeMirror.defineMIME("application/x-ejs", { name: "htmlembedded", scriptingMode
 CodeMirror.defineMIME("application/x-aspx", { name: "htmlembedded", scriptingModeSpec:"text/x-csharp"});
 CodeMirror.defineMIME("application/x-jsp", { name: "htmlembedded", scriptingModeSpec:"text/x-java"});
 CodeMirror.defineMIME("application/x-erb", { name: "htmlembedded", scriptingModeSpec:"ruby"});
+});

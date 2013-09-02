@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.registerHelper("fold", "brace", function(cm, start) {
   var line = start.line, lineText = cm.getLine(line);
   var startCh, tokenType;
@@ -91,3 +92,4 @@ CodeMirror.registerHelper("fold", "include", function(cm, start) {
           to: cm.clipPos(CodeMirror.Pos(end))};
 });
 CodeMirror.includeRangeFinder = CodeMirror.fold.include; // deprecated
+});

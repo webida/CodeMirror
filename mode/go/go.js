@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("go", function(config) {
   var indentUnit = config.indentUnit;
 
@@ -166,3 +167,4 @@ CodeMirror.defineMode("go", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-go", "go");
+});

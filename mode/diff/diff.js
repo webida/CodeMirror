@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("diff", function() {
 
   var TOKEN_NAMES = {
@@ -30,3 +31,4 @@ CodeMirror.defineMode("diff", function() {
 });
 
 CodeMirror.defineMIME("text/x-diff", "diff");
+});

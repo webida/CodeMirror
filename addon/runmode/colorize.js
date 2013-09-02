@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.colorize = (function() {
 
   var isBlock = /^(p|li|div|h\\d|pre|blockquote|td)$/;
@@ -27,3 +28,4 @@ CodeMirror.colorize = (function() {
     }
   };
 })();
+});

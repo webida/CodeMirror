@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("velocity", function() {
     function parseWords(str) {
         var obj = {}, words = str.split(" ");
@@ -184,3 +185,4 @@ CodeMirror.defineMode("velocity", function() {
 });
 
 CodeMirror.defineMIME("text/velocity", "velocity");
+});

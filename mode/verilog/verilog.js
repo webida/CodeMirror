@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("verilog", function(config, parserConfig) {
   var indentUnit = config.indentUnit,
       keywords = parserConfig.keywords || {},
@@ -180,3 +181,4 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
     hooks: {"`": metaHook, "$": metaHook}
   });
 }());
+});

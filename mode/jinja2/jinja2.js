@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("jinja2", function() {
     var keywords = ["block", "endblock", "for", "endfor", "in", "true", "false",
                     "loop", "none", "self", "super", "if", "as", "not", "and",
@@ -39,4 +40,5 @@ CodeMirror.defineMode("jinja2", function() {
             return state.tokenize(stream, state);
         }
     };
+});
 });

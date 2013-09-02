@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
 Copyright (C) 2011 by MarkLogic Corporation
 Author: Mike Brevoort <mike@brevoort.com>
@@ -452,3 +453,4 @@ CodeMirror.defineMode("xquery", function() {
 });
 
 CodeMirror.defineMIME("application/xquery", "xquery");
+});

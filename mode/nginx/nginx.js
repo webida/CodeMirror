@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("nginx", function(config) {
 
   function words(str) {
@@ -161,3 +162,4 @@ CodeMirror.defineMode("nginx", function(config) {
 });
 
 CodeMirror.defineMIME("text/nginx", "text/x-nginx-conf");
+});

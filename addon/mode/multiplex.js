@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.multiplexingMode = function(outer /*, others */) {
   // Others should be {open, close, mode [, delimStyle] [, innerStyle]} objects
   var others = Array.prototype.slice.call(arguments, 1);
@@ -99,3 +100,4 @@ CodeMirror.multiplexingMode = function(outer /*, others */) {
     }
   };
 };
+});

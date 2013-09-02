@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("r", function(config) {
   function wordObj(str) {
     var words = str.split(" "), res = {};
@@ -139,3 +140,4 @@ CodeMirror.defineMode("r", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-rsrc", "r");
+});

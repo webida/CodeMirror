@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("vb", function(conf, parserConf) {
     var ERRORCLASS = 'error';
 
@@ -257,3 +258,4 @@ CodeMirror.defineMode("vb", function(conf, parserConf) {
 });
 
 CodeMirror.defineMIME("text/x-vb", "vb");
+});

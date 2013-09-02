@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   function keywords(str) {
     var obj = {}, words = str.split(" ");
@@ -130,3 +131,4 @@
   CodeMirror.defineMIME("application/x-httpd-php-open", {name: "php", startOpen: true});
   CodeMirror.defineMIME("text/x-php", phpConfig);
 })();
+});

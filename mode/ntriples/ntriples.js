@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**********************************************************
 * This script provides syntax highlighting support for
 * the Ntriples format.
@@ -168,3 +169,4 @@ CodeMirror.defineMode("ntriples", function() {
 });
 
 CodeMirror.defineMIME("text/n-triples", "ntriples");
+});

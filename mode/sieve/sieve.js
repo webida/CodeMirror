@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
  * See LICENSE in this directory for the license under which this code
  * is released.
@@ -181,3 +182,4 @@ CodeMirror.defineMode("sieve", function(config) {
 });
 
 CodeMirror.defineMIME("application/sieve", "sieve");
+});

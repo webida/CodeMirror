@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 //tcl mode by Ford_Lawnmower :: Based on Velocity mode by Steve O'Hara
 CodeMirror.defineMode("tcl", function() {
   function parseWords(str) {
@@ -129,3 +130,4 @@ CodeMirror.defineMode("tcl", function() {
     };
 });
 CodeMirror.defineMIME("text/x-tcl", "tcl");
+});

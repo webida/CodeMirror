@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Author: Hans Engel
  * Branched from CodeMirror's Scheme mode (by Koh Zi Han, based on implementation by Koh Zi Chun)
@@ -222,3 +223,4 @@ CodeMirror.defineMode("clojure", function () {
 });
 
 CodeMirror.defineMIME("text/x-clojure", "clojure");
+});

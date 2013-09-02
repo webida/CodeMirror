@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
   var GUTTER_ID = "CodeMirror-lint-markers";
@@ -201,3 +202,4 @@
   CodeMirror.defineOption("lintWith", false, optionHandler); // deprecated
   CodeMirror.defineOption("lint", false, optionHandler); // deprecated
 })();
+});

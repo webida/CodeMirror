@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("clike", function(config, parserConfig) {
   var indentUnit = config.indentUnit,
       statementIndentUnit = parserConfig.statementIndentUnit || indentUnit,
@@ -360,3 +361,4 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     hooks: {"#": cppHook}
   });
 }());
+});

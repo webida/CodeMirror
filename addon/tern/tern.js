@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Glue code between CodeMirror and Tern.
 //
 // Create a CodeMirror.TernServer to wrap an actual Tern server,
@@ -606,3 +607,4 @@
     this.request = function(body, c) { send({type: "req", body: body}, c); };
   }
 })();
+});

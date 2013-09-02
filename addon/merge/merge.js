@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -445,3 +446,4 @@
   function posMax(a, b) { return (a.line - b.line || a.ch - b.ch) > 0 ? a : b; }
   function posEq(a, b) { return a.line == b.line && a.ch == b.ch; }
 })();
+});

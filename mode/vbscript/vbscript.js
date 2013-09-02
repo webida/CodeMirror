@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
 For extra ASP classic objects, initialize CodeMirror instance with this option:
     isASP: true
@@ -332,3 +333,4 @@ CodeMirror.defineMode("vbscript", function(conf, parserConf) {
 });
 
 CodeMirror.defineMIME("text/vbscript", "vbscript");
+});

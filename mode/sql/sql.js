@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("sql", function(config, parserConfig) {
   "use strict";
 
@@ -347,3 +348,4 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
   dateSQL:
     Used for date/time SQL standard syntax, because not all DBMS's support same temporal types.
 */
+});

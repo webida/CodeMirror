@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("groovy", function(config) {
   function words(str) {
     var obj = {}, words = str.split(" ");
@@ -209,3 +210,4 @@ CodeMirror.defineMode("groovy", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-groovy", "groovy");
+});

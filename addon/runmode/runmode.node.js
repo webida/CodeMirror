@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /* Just enough of CodeMirror to run runMode under node.js */
 
 function splitLines(string){ return string.split(/\r?\n|\r/); };
@@ -101,3 +102,4 @@ exports.runMode = function(string, modespec, callback) {
     }
   }
 };
+});

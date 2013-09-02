@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("properties", function() {
   return {
     token: function(stream, state) {
@@ -61,3 +62,4 @@ CodeMirror.defineMode("properties", function() {
 
 CodeMirror.defineMIME("text/x-properties", "properties");
 CodeMirror.defineMIME("text/x-ini", "properties");
+});

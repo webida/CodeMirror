@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Tag-closer extension for CodeMirror.
  *
@@ -84,3 +85,4 @@
     return -1;
   }
 })();
+});

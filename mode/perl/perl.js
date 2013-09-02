@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // CodeMirror2 mode/perl/perl.js (text/x-perl) beta 0.10 (2011-11-08)
 // This is a part of CodeMirror from https://github.com/sabaca/CodeMirror_mode_perl (mail@sabaca.com)
 CodeMirror.defineMode("perl",function(){
@@ -814,3 +815,4 @@ CodeMirror.StringStream.prototype.eatSuffix=function(c){
                 this.pos=y;
         else
                 this.pos=x;};
+});

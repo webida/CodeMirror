@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function () {
   var Pos = CodeMirror.Pos;
 
@@ -144,3 +145,4 @@
     return found;
   }
 })();
+});

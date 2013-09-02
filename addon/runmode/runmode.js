@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.runMode = function(string, modespec, callback, options) {
   var mode = CodeMirror.getMode(CodeMirror.defaults, modespec);
   var ie = /MSIE \d/.test(navigator.userAgent);
@@ -54,3 +55,4 @@ CodeMirror.runMode = function(string, modespec, callback, options) {
     }
   }
 };
+});

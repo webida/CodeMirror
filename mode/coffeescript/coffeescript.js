@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Link to the project's GitHub page:
  * https://github.com/pickhardt/coffeescript-codemirror-mode
@@ -346,3 +347,4 @@ CodeMirror.defineMode('coffeescript', function(conf) {
 });
 
 CodeMirror.defineMIME('text/x-coffeescript', 'coffeescript');
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -151,3 +152,4 @@
 
   CodeMirror.defineMIME("text/x-haml", "haml");
 })();
+});

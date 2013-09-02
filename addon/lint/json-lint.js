@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Depends on jsonlint.js from https://github.com/zaach/jsonlint
 
 CodeMirror.registerHelper("lint", "json", function(text) {
@@ -13,3 +14,4 @@ CodeMirror.registerHelper("lint", "json", function(text) {
   return found;
 });
 CodeMirror.jsonValidator = CodeMirror.lint.json; // deprecated
+});

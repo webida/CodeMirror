@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("gfm", function(config) {
   var codeDepth = 0;
   function blankLine(state) {
@@ -94,3 +95,4 @@ CodeMirror.defineMode("gfm", function(config) {
   });
   return CodeMirror.overlayMode(CodeMirror.getMode(config, "gfmBase"), gfmOverlay);
 }, "markdown");
+});

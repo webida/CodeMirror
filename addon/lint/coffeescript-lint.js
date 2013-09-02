@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Depends on coffeelint.js from http://www.coffeelint.org/js/coffeelint.js
 
 CodeMirror.registerHelper("lint", "coffeescript", function(text) {
@@ -23,3 +24,4 @@ CodeMirror.registerHelper("lint", "coffeescript", function(text) {
   return found;
 });
 CodeMirror.coffeeValidator = CodeMirror.lint.coffeescript; // deprecated
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("haxe", function(config, parserConfig) {
   var indentUnit = config.indentUnit;
 
@@ -427,3 +428,4 @@ CodeMirror.defineMode("haxe", function(config, parserConfig) {
 });
 
 CodeMirror.defineMIME("text/x-haxe", "haxe");
+});

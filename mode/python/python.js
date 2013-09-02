@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("python", function(conf, parserConf) {
     var ERRORCLASS = 'error';
 
@@ -363,4 +364,5 @@ CodeMirror.defineMIME("text/x-cython", {
   extra_keywords: words("by cdef cimport cpdef ctypedef enum except"+
                         "extern gil include nogil property public"+
                         "readonly struct union DEF IF ELIF ELSE")
+});
 });

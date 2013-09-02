@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
  *      Pig Latin Mode for CodeMirror 2
  *      @author Prasanth Jayachandran
@@ -169,3 +170,4 @@ CodeMirror.defineMode("pig", function(_config, parserConfig) {
     types: keywords(pTypes)
   });
 }());
+});

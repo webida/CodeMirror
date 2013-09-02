@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("pascal", function() {
   function words(str) {
     var obj = {}, words = str.split(" ");
@@ -92,3 +93,4 @@ CodeMirror.defineMode("pascal", function() {
 });
 
 CodeMirror.defineMIME("text/x-pascal", "pascal");
+});

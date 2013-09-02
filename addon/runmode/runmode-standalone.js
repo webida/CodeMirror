@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /* Just enough of CodeMirror to run runMode under node.js */
 
 window.CodeMirror = {};
@@ -130,3 +131,4 @@ CodeMirror.runMode = function (string, modespec, callback, options) {
     }
   }
 };
+});

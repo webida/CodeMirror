@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.registerHelper("fold", "comment", function(cm, start) {
   var mode = cm.getModeAt(start), startToken = mode.blockCommentStart, endToken = mode.blockCommentEnd;
   if (!startToken || !endToken) return;
@@ -37,4 +38,5 @@ CodeMirror.registerHelper("fold", "comment", function(cm, start) {
   if (end == null || line == end && endCh == startCh) return;
   return {from: CodeMirror.Pos(line, startCh),
           to: CodeMirror.Pos(end, endCh)};
+});
 });

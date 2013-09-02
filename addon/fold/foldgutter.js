@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -120,3 +121,4 @@
       updateFoldInfo(cm, line, line + 1);
   }
 })();
+});

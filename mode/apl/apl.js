@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("apl", function() {
   var builtInOps = {
     ".": "innerProduct",
@@ -158,3 +159,4 @@ CodeMirror.defineMode("apl", function() {
 });
 
 CodeMirror.defineMIME("text/apl", "apl");
+});

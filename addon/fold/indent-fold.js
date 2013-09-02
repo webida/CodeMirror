@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.registerHelper("fold", "indent", function(cm, start) {
   var tabSize = cm.getOption("tabSize"), firstLine = cm.getLine(start.line);
   var myIndent = CodeMirror.countColumn(firstLine, null, tabSize);
@@ -10,3 +11,4 @@ CodeMirror.registerHelper("fold", "indent", function(cm, start) {
   }
 });
 CodeMirror.indentRangeFinder = CodeMirror.fold.indent; // deprecated
+});

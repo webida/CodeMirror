@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Define search commands. Depends on dialog.js or another
 // implementation of the openDialog method.
 
@@ -129,3 +130,4 @@
   CodeMirror.commands.replace = replace;
   CodeMirror.commands.replaceAll = function(cm) {replace(cm, true);};
 })();
+});

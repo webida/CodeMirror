@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("jade", function () {
   var symbol_regex1 = /^(?:~|!|%|\^|\*|\+|=|\\|:|;|,|\/|\?|&|<|>|\|)/;
   var open_paren_regex = /^(\(|\[)/;
@@ -88,3 +89,4 @@ CodeMirror.defineMode("jade", function () {
 });
 
 CodeMirror.defineMIME('text/x-jade', 'jade');
+});

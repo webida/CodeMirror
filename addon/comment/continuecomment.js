@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   var modes = ["clike", "css", "javascript"];
   for (var i = 0; i < modes.length; ++i)
@@ -42,3 +43,4 @@
     cm.addKeyMap(map);
   });
 })();
+});

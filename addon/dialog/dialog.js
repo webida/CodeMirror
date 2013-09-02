@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Open simple dialogs on top of an editor. Relies on dialog.css.
 
 (function() {
@@ -78,3 +79,4 @@
     }
   });
 })();
+});

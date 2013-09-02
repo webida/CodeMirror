@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineOption("showTrailingSpace", false, function(cm, val, prev) {
   if (prev == CodeMirror.Init) prev = false;
   if (prev && !val)
@@ -12,4 +13,5 @@ CodeMirror.defineOption("showTrailingSpace", false, function(cm, val, prev) {
       },
       name: "trailingspace"
     });
+});
 });

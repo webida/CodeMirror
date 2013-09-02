@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /***
     |''Name''|tiddlywiki.js|
     |''Description''|Enables TiddlyWikiy syntax highlighting using CodeMirror|
@@ -351,3 +352,4 @@ CodeMirror.defineMode("tiddlywiki", function () {
 
 CodeMirror.defineMIME("text/x-tiddlywiki", "tiddlywiki");
 //}}}
+});

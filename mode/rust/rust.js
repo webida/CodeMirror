@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("rust", function() {
   var indentUnit = 4, altIndentUnit = 2;
   var valKeywords = {
@@ -434,3 +435,4 @@ CodeMirror.defineMode("rust", function() {
 });
 
 CodeMirror.defineMIME("text/x-rustsrc", "rust");
+});

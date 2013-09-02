@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("http", function() {
   function failFirstLine(stream, state) {
     stream.skipToEnd();
@@ -96,3 +97,4 @@ CodeMirror.defineMode("http", function() {
 });
 
 CodeMirror.defineMIME("message/http", "http");
+});

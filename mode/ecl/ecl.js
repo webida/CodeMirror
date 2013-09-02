@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("ecl", function(config) {
 
   function words(str) {
@@ -190,3 +191,4 @@ CodeMirror.defineMode("ecl", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-ecl", "ecl");
+});

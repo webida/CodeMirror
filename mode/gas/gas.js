@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("gas", function(_config, parserConfig) {
   'use strict';
 
@@ -327,4 +328,5 @@ CodeMirror.defineMode("gas", function(_config, parserConfig) {
     blockCommentStart: "/*",
     blockCommentEnd: "*/"
   };
+});
 });

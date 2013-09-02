@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
 
   var htmlFound = CodeMirror.modes.hasOwnProperty("xml");
@@ -549,3 +550,4 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
 }, "xml");
 
 CodeMirror.defineMIME("text/x-markdown", "markdown");
+});

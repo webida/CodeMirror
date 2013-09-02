@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 //mIRC mode by Ford_Lawnmower :: Based on Velocity mode by Steve O'Hara
 CodeMirror.defineMIME("text/mirc", "mirc");
 CodeMirror.defineMode("mirc", function() {
@@ -174,4 +175,5 @@ CodeMirror.defineMode("mirc", function() {
       return state.tokenize(stream, state);
     }
   };
+});
 });

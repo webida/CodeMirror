@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // A number of additional default bindings that are too obscure to
 // include in the core codemirror.js file.
 
@@ -41,3 +42,4 @@
   CodeMirror.keyMap["default"]["Alt-Up"] = "moveLinesUp";
   CodeMirror.keyMap["default"]["Alt-Down"] = "moveLinesDown";
 })();
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode('tiki', function(config) {
   function inBlock(style, terminator, returnTokenizer) {
     return function(stream, state) {
@@ -306,3 +307,4 @@ return {
 });
 
 CodeMirror.defineMIME("text/tiki", "tiki");
+});

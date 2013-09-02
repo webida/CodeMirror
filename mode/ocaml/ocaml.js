@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode('ocaml', function() {
 
   var words = {
@@ -114,3 +115,4 @@ CodeMirror.defineMode('ocaml', function() {
 });
 
 CodeMirror.defineMIME('text/x-ocaml', 'ocaml');
+});

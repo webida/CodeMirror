@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   var DEFAULT_BRACKETS = "()[]{}''\"\"";
   var DEFAULT_EXPLODE_ON_ENTER = "[]{}";
@@ -80,3 +81,4 @@
     };
   }
 })();
+});

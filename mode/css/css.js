@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("css", function(config) {
   return CodeMirror.getMode(config, "text/css");
 });
@@ -623,3 +624,4 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
     name: "css-base"
   });
 })();
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -71,3 +72,4 @@
     };
   });
 })();
+});

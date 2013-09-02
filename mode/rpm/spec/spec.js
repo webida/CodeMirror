@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Quick and dirty spec file highlighting
 
 CodeMirror.defineMode("spec", function() {
@@ -64,3 +65,4 @@ CodeMirror.defineMode("spec", function() {
 });
 
 CodeMirror.defineMIME("text/x-rpm-spec", "spec");
+});

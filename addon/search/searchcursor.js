@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function(){
   var Pos = CodeMirror.Pos;
 
@@ -141,3 +142,4 @@
     return new SearchCursor(this, query, pos, caseFold);
   });
 })();
+});

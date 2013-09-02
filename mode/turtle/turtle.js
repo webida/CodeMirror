@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("turtle", function(config) {
   var indentUnit = config.indentUnit;
   var curPunc;
@@ -143,3 +144,4 @@ CodeMirror.defineMode("turtle", function(config) {
 });
 
 CodeMirror.defineMIME("text/turtle", "turtle");
+});

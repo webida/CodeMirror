@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -66,3 +67,4 @@
   CodeMirror.xmlHint = getHints; // deprecated
   CodeMirror.registerHelper("hint", "xml", getHints);
 })();
+});

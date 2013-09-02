@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode('smalltalk', function(config) {
 
   var specialChars = /[+\-\/\\*~<>=@%|&?!.,:;^]/;
@@ -149,3 +150,4 @@ CodeMirror.defineMode('smalltalk', function(config) {
 });
 
 CodeMirror.defineMIME('text/x-stsrc', {name: 'smalltalk'});
+});

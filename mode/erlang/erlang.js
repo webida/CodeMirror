@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // block; "begin", "case", "fun", "if", "receive", "try": closed by "end"
 // block internal; "after", "catch", "of"
 // guard; "when", closed by "->"
@@ -481,4 +482,5 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
 
     lineComment: "%"
   };
+});
 });

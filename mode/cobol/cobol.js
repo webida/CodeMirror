@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Author: Gautam Mehta
  * Branched from CodeMirror's Scheme mode
@@ -238,3 +239,4 @@ CodeMirror.defineMode("cobol", function () {
 });
 
 CodeMirror.defineMIME("text/x-cobol", "cobol");
+});

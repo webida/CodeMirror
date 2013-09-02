@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Author: Koh Zi Han, based on implementation by Koh Zi Chun
  */
@@ -230,3 +231,4 @@ CodeMirror.defineMode("scheme", function () {
 });
 
 CodeMirror.defineMIME("text/x-scheme", "scheme");
+});

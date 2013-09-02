@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode('shell', function() {
 
   var words = {};
@@ -116,3 +117,4 @@ CodeMirror.defineMode('shell', function() {
 });
 
 CodeMirror.defineMIME('text/x-sh', 'shell');
+});

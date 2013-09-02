@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Supported keybindings:
  *
@@ -3651,3 +3652,4 @@
   CodeMirror.Vim = Vim();
 }
 )();
+});

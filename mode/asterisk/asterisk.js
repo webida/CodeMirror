@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
  * =====================================================================================
  *
@@ -181,3 +182,4 @@ CodeMirror.defineMode("asterisk", function() {
 });
 
 CodeMirror.defineMIME("text/x-asterisk", "asterisk");
+});

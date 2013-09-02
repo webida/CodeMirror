@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("yaml", function() {
 
   var cons = ['true', 'false', 'on', 'off', 'yes', 'no'];
@@ -95,3 +96,4 @@ CodeMirror.defineMode("yaml", function() {
 });
 
 CodeMirror.defineMIME("text/x-yaml", "yaml");
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
   LESS mode - http://www.lesscss.org/
   Ported to CodeMirror by Peter Kroon <plakroon@gmail.com>
@@ -256,3 +257,4 @@ CodeMirror.defineMode("less", function(config) {
 CodeMirror.defineMIME("text/x-less", "less");
 if (!CodeMirror.mimeModes.hasOwnProperty("text/css"))
   CodeMirror.defineMIME("text/css", "less");
+});

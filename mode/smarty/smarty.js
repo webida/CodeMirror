@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Smarty 2 and 3 mode.
  */
@@ -203,3 +204,4 @@ CodeMirror.defineMode("smarty", function(config) {
 });
 
 CodeMirror.defineMIME("text/x-smarty", "smarty");
+});

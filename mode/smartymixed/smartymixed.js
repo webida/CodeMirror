@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
 * @file smartymixed.js
 * @brief Smarty Mixed Codemirror mode (Smarty + Mixed HTML)
@@ -168,3 +169,4 @@ CodeMirror.defineMode("smartymixed", function(config) {
 
 CodeMirror.defineMIME("text/x-smarty", "smartymixed");
 // vim: et ts=2 sts=2 sw=2
+});

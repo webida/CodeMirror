@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   CodeMirror.defineOption("placeholder", "", function(cm, val, old) {
     var prev = old && old != CodeMirror.Init;
@@ -52,3 +53,4 @@
     return (cm.lineCount() === 1) && (cm.getLine(0) === "");
   }
 })();
+});

@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   "use strict";
 
@@ -385,3 +386,4 @@
   for (var i = 0; i < 10; ++i) regPrefix(String(i));
   regPrefix("-");
 })();
+});

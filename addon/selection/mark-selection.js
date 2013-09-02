@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Because sometimes you need to mark the selected *text*.
 //
 // Adds an option 'styleSelectedText' which, when enabled, gives
@@ -106,3 +107,4 @@
     }
   }
 })();
+});

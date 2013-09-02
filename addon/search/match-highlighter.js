@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Highlighting text that matches the selection
 //
 // Defines an option highlightSelectionMatches, which, when enabled,
@@ -89,3 +90,4 @@
     }};
   }
 })();
+});

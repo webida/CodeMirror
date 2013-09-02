@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /*
  * Author: Constantin Jucovschi (c.jucovschi@jacobs-university.de)
  * Licence: MIT
@@ -244,3 +245,4 @@ CodeMirror.defineMode("stex", function() {
 
 CodeMirror.defineMIME("text/x-stex", "stex");
 CodeMirror.defineMIME("text/x-latex", "stex");
+});

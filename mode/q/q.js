@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 CodeMirror.defineMode("q",function(config){
   var indentUnit=config.indentUnit,
       curPunc,
@@ -122,3 +123,4 @@ CodeMirror.defineMode("q",function(config){
   };
 });
 CodeMirror.defineMIME("text/x-q","q");
+});

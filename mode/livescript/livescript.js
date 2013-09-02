@@ -1,3 +1,4 @@
+define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /**
  * Link to the project's GitHub page:
  * https://github.com/duralog/CodeMirror
@@ -265,3 +266,4 @@
 })();
 
 CodeMirror.defineMIME('text/x-livescript', 'livescript');
+});
