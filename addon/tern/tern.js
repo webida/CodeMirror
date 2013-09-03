@@ -45,6 +45,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     var self = this;
     this.options = options || {};
     var plugins = this.options.plugins || (this.options.plugins = {});
+    var tern = this.options.tern || tern;
     if (!plugins.doc_comment) plugins.doc_comment = true;
     if (this.options.useWorker) {
       this.server = new WorkerServer(this);
