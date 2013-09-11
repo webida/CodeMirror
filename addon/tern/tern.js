@@ -324,14 +324,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         if (!data.file && data.url) { window.open(data.url); return; }
 
         if (data.file) {
-          var localDoc = ts.docs[data.file], found;
-          if (localDoc && (found = findContext(localDoc.doc, data))) {
-            ts.jumpStack.push({file: doc.name,
-                               start: cm.getCursor("from"),
-                               end: cm.getCursor("to")});
-            moveTo(ts, doc, localDoc, found.start, found.end);
+            if (ts.options.moveToPosition) {
+                ts.options.moveToPosition(data);
+            }
             return;
-          }
         }
         showError(ts, cm, "Could not find a definition.");
       });
