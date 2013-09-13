@@ -398,7 +398,7 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
     "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang",
     "ruby-position", "ruby-span", "shape-inside", "shape-outside", "size",
     "speak", "speak-as", "speak-header",
-    "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set",
+    "speak-numeral", "speak-punctuation", "speech-rate", "src", "stress", "string-set",
     "tab-size", "table-layout", "target", "target-name", "target-new",
     "target-position", "text-align", "text-align-last", "text-decoration",
     "text-decoration-color", "text-decoration-line", "text-decoration-skip",
