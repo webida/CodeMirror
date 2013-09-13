@@ -222,11 +222,12 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function (CodeMirror, _)
         'xx-large', 'xx-small'
     ];
 
-    var allWords = atMediaTypes
-    .concat(atMediaFeatures)
-    .concat(propertyKeywords)
-    .concat(colorKeywords)
-    .concat(valueKeywords);
+    var allWords = _.uniq(
+        atMediaTypes
+        .concat(atMediaFeatures)
+        .concat(propertyKeywords)
+        .concat(colorKeywords)
+        .concat(valueKeywords));
 
     function commonstart(str, sub) {
         if (str.substring(0, sub.length).toLowerCase() === sub) {
@@ -262,7 +263,7 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function (CodeMirror, _)
         }
         function calculateRelevance(common) {
             var mcp = _.max(common, function (c) { return c.len; });
-            var rel = mcp.len - str.length - mcp.length;
+            var rel = mcp.len - str.length - mcp.len;
             return rel;
         }
         var common = calculateCommon(0, 0);
