@@ -36,3 +36,7 @@
   background: #08f;
   color: white;
 }
+
+.CodeMirror-hint-common-string {
+  font-weight: 900;
+}
