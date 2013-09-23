@@ -222,7 +222,9 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
           tip.appendChild(document.createTextNode(" — " + data.doc));
         if (data.url) {
           tip.appendChild(document.createTextNode(" "));
-          tip.appendChild(elt("a", null, "[docs]")).href = data.url;
+          var docsBtn = elt("a", null, "[docs]");
+          docsBtn.target = "_blank";
+          tip.appendChild(docsBtn).href = data.url;
         }
       }
       tempTooltip(cm, tip);
