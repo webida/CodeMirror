@@ -461,6 +461,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     },
 
     electricChars: ":{}",
+    checkElectric: function(cm) {
+      var tokenType = cm.getTokenTypeAt(cm.getCursor("head"));
+      return (tokenType !== "string" && tokenType !== "comment");
+    },
     blockCommentStart: jsonMode ? null : "/*",
     blockCommentEnd: jsonMode ? null : "*/",
     lineComment: jsonMode ? null : "//",
