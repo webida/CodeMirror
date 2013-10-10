@@ -106,7 +106,9 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     request: function(cm, query, c) {
       this.server.request(buildRequest(this, findDoc(this, cm.getDoc()), query), c);
-    }
+    },
+
+    showReferences: function(cm, c) { showReferences(this, cm, c); }
   };
 
   var Pos = CodeMirror.Pos;
@@ -515,6 +517,16 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       cm.openDialog(text + ": <input type=text>", f);
     else
       f(prompt(text, ""));
+  }
+
+  // Show references
+  function showReferences(ts, cm, c) {
+    ts.request(cm, {type: "refs", file: ts.server._ccFilePath, end: cm.getCursor('head')}, function (err, data) {
+      if (err) {
+        tempTooltip(cm, "" + err);
+      }
+      c(err, data);
+    });
   }
 
   // Tooltips
