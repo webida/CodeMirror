@@ -260,7 +260,7 @@ CodeMirror.defineMode('coffeescript', function(conf) {
         if (current === '.') {
             style = state.tokenize(stream, state);
             current = stream.current();
-            if (style === 'variable') {
+            if (/^\.[\w$]+$/.test(current)) {
                 return 'variable';
             } else {
                 return ERRORCLASS;

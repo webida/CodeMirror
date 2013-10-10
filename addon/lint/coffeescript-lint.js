@@ -1,6 +1,8 @@
 define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Depends on coffeelint.js from http://www.coffeelint.org/js/coffeelint.js
 
+// declare global: coffeelint
+
 CodeMirror.registerHelper("lint", "coffeescript", function(text) {
   var found = [];
   var parseError = function(err) {

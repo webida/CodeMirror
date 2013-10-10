@@ -1,6 +1,8 @@
 define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Depends on csslint.js from https://github.com/stubbornella/csslint
 
+// declare global: CSSLint
+
 CodeMirror.registerHelper("lint", "css", function(text) {
   var found = [];
   var results = CSSLint.verify(text), messages = results.messages, message = null;
