@@ -1,4 +1,5 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
+// declare global: tern, server
+
 var server;
 
 this.onmessage = function(e) {
@@ -38,4 +39,3 @@ function startServer(defs, plugins, scripts) {
 var console = {
   log: function(v) { postMessage({type: "debug", message: v}); }
 };
-});

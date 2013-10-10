@@ -354,7 +354,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     },
 
     "Ctrl-S": "save", "Ctrl-W": "save", "S": "saveAll", "F": "open", "U": repeated("undo"), "K": "close",
-    "Delete": function(cm) { kill(cm, cm.getCursor(), sentenceEnd(cm, 1), true); },
+    "Delete": function(cm) { kill(cm, cm.getCursor(), bySentence(cm, cm.getCursor(), 1), true); },
     auto: "emacs", nofallthrough: true, disableInput: true
   };
 

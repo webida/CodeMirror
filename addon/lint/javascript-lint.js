@@ -1,5 +1,7 @@
 define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
+  "use strict";
+  // declare global: JSHINT
 
   var bogus = [ "Dangerous comment" ];
 

@@ -1,10 +1,8 @@
 define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
-CodeMirror.defineMode("css", function(config) {
-  return CodeMirror.getMode(config, "text/css");
-});
-
-CodeMirror.defineMode("css-base", function(config, parserConfig) {
+CodeMirror.defineMode("css", function(config, parserConfig) {
   "use strict";
+
+  if (!parserConfig.propertyKeywords) parserConfig = CodeMirror.resolveMode("text/css");
 
   var indentUnit = config.indentUnit,
       hooks = parserConfig.hooks || {},
@@ -40,7 +38,7 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
       stream.match(/^\s*\w*/);
       return ret("keyword", "important");
     }
-    else if (/\d/.test(ch)) {
+    else if (/\d/.test(ch) || ch == "." && stream.eat(/\d/)) {
       stream.eatWhile(/[\w.%]/);
       return ret("number", "unit");
     }
@@ -278,16 +276,14 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
           state.stack[state.stack.length-1] = "@mediaType";
           state.stack.push("@mediaType(");
         }
+        else state.stack.push("(");
       }
       else if (type == ")") {
-        if (context == "propertyValue" && state.stack[state.stack.length-2] == "@mediaType(") {
+        if (context == "propertyValue") {
           // In @mediaType( without closing ; after propertyValue
           state.stack.pop();
-          state.stack.pop();
         }
-        else if (context == "@mediaType(") {
-          state.stack.pop();
-        }
+        state.stack.pop();
       }
       else if (type == ":" && state.lastToken == "property") state.stack.push("propertyValue");
       else if (context == "propertyValue" && type == ";") state.stack.pop();
@@ -583,7 +579,7 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
         return false;
       }
     },
-    name: "css-base"
+    name: "css"
   });
 
   CodeMirror.defineMIME("text/x-scss", {
@@ -594,6 +590,12 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
     valueKeywords: valueKeywords,
     allowNested: true,
     hooks: {
+      ":": function(stream) {
+        if (stream.match(/\s*{/)) {
+          return [null, "{"];
+        }
+        return false;
+      },
       "$": function(stream) {
         stream.match(/^[\w-]+/);
         if (stream.peek() == ":") {
@@ -621,7 +623,7 @@ CodeMirror.defineMode("css-base", function(config, parserConfig) {
         }
       }
     },
-    name: "css-base"
+    name: "css"
   });
 })();
 });
