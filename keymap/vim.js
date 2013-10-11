@@ -242,6 +242,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         operator: 'swapcase', operatorArgs: { shouldMoveCursor: true },
         motion: 'moveByCharacters', motionArgs: { forward: true }},
     // Actions
+    { keys: ['<C-e>'], type: 'action', action: 'scrollDown' },
+    { keys: ['<C-y>'], type: 'action', action: 'scrollUp' },
     { keys: ['<C-i>'], type: 'action', action: 'jumpListWalk',
         actionArgs: { forward: true }},
     { keys: ['<C-o>'], type: 'action', action: 'jumpListWalk',
@@ -1614,6 +1616,12 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
             break;
         }
         cm.scrollTo(null, y);
+      },
+      scrollUp: function(cm, actionArgs) {
+        CodeMirror.commands.scrollUp(cm);
+      },
+      scrollDown: function(cm, actionArgs) {
+        CodeMirror.commands.scrollDown(cm);
       },
       replayMacro: function(cm, actionArgs) {
         var registerName = actionArgs.selectedCharacter;
