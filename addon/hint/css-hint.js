@@ -11,8 +11,13 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function(CodeMirror, _) 
     var inner = CodeMirror.innerMode(cm.getMode(), token.state);
     if (inner.mode.name != "css") return;
 
+    if ((token.type === 'tag' || token.type === 'qualifier') && /^\./.test(token.string)) {
+      token.type = 'class';
+    } else if (token.type === 'builtin' && /^#/.test(token.string)) {
+      token.type = 'id';
+    }
     // If it's not a 'word-style' token, ignore the token.
-    if (!/^[\w$_-]*$/.test(token.string)) {
+    else if (!/^[\w$_-]*$/.test(token.string)) {
       token = {
         start: cur.ch, end: cur.ch, string: "", state: token.state,
         type: null
@@ -33,6 +38,11 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function(CodeMirror, _) 
       keywords = propertyKeywords;
     else if (token.type.indexOf("variable") == 0)
       keywords = valueKeywords;
+    else if (token.type === 'id' || token.type === 'class') {
+      if (cm.hintprovider.css) {
+        keywords = CodeMirror.hintprovider.css(cm, token);
+      }
+    }
 
     if (!keywords)
       return;
