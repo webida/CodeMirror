@@ -39,7 +39,7 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function(CodeMirror, _) 
     else if (token.type.indexOf("variable") == 0)
       keywords = valueKeywords;
     else if (token.type === 'id' || token.type === 'class') {
-      if (cm.hintprovider.css) {
+      if (cm.hintprovider && cm.hintprovider.css) {
         keywords = CodeMirror.hintprovider.css(cm, token);
       }
     }
