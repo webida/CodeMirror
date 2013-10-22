@@ -32,6 +32,10 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       'thead': {'tbody': true, 'tfoot': true},
       'tr': {'tr': true}
     },
+    resourceAttributes: {
+      'link': {'href': true},
+      'script': {'src': true}
+    },
     doNotIndent: {"pre": true},
     allowUnquoted: true,
     allowMissing: true
@@ -39,6 +43,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     autoSelfClosers: {},
     implicitlyClosed: {},
     contextGrabbers: {},
+    resourceAttributes: {},
     doNotIndent: {},
     allowUnquoted: false,
     allowMissing: false
@@ -254,7 +259,11 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   }
 
   function attributes(type) {
-    if (type == "word") {setStyle = "attribute"; return cont(attribute, attributes);}
+    if (type == "word") {
+      curState.attrName = curStream.string.substring(curStream.start, curStream.pos);
+      setStyle = "attribute";
+      return cont(attribute, attributes);
+    }
     if (type == "endTag" || type == "selfcloseTag") return pass();
     setStyle = "error";
     return cont(attributes);
@@ -266,8 +275,19 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     return (type == "endTag" || type == "selfcloseTag") ? pass() : cont();
   }
   function attvalue(type) {
-    if (type == "string") return cont(attvaluemaybe);
-    if (type == "word" && Kludges.allowUnquoted) {setStyle = "string"; return cont();}
+    if (type == "string") {
+      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][curState.attrName]) {
+        setStyle = "link";
+      }
+      return cont(attvaluemaybe);
+    }
+    if (type == "word" && Kludges.allowUnquoted) {
+      setStyle = "string";
+      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][curState.attrName]) {
+        setStyle = "link";
+      }
+      return cont();
+    }
     setStyle = "error";
     return (type == "endTag" || type == "selfCloseTag") ? pass() : cont();
   }
