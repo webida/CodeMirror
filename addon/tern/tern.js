@@ -91,9 +91,13 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (found && found.changed) sendDoc(this, found);
     },
 
-    complete: function(cm) {
+    complete: function(cm, c, options) {
       var self = this;
-      CodeMirror.showHint(cm, function(cm, c) { return hint(self, cm, c); }, {async: true});
+      CodeMirror.showHint(cm, function(cm, c2) {
+        var ret = hint(self, cm, c2);
+        if (c) c();
+        return ret;
+      }, {async: true, completeSingle: options && options.completeSingle});
     },
 
     getHint: function(cm, c) { return hint(this, cm, c); },
@@ -186,6 +190,21 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (error) return showError(ts, cm, error);
       var completions = [], after = "";
       var from = data.start, to = data.end;
+
+      if (ts.options.positionMargin) {
+        var margin = ts.options.positionMargin(cm.getDoc());
+        if (from.line === 0) {
+          from.ch += margin.ch;
+        } else {
+          from.line += margin.line;
+        }
+        if (to.line === 0) {
+          to.ch += margin.ch;
+        } else {
+          to.line += margin.line;
+        }
+      }
+
       if (cm.getRange(Pos(from.line, from.ch - 2), from) == "[\"" &&
           cm.getRange(to, Pos(to.line, to.ch + 2)) != "\"]")
         after = "\"]";
@@ -483,6 +502,15 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         query.start = doc.doc.getCursor("start");
     }
     var startPos = query.start || query.end;
+
+    if (ts.options.positionMargin) {
+      var margin = ts.options.positionMargin(doc.doc);
+      if (startPos.line === margin.line) {
+        startPos.ch -= margin.ch;
+      } else {
+        startPos.line -= margin.line;
+      }
+    }
 
     if (doc.changed) {
       if (doc.doc.lineCount() > bigDoc && allowFragments !== false &&

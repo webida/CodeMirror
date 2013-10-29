@@ -51,8 +51,14 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
       if (this.options.completeSingle != false && data.list.length == 1)
         this.pick(data, 0);
-      else
+      else {
+        if (data.list.length === 1) {
+          if (this.cm.getTokenAt(this.cm.getCursor()).string === data.list[0].text) {
+            return;
+          }
+        }
         this.showWidget(data);
+      }
     },
 
     showWidget: function(data) {
