@@ -104,6 +104,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     jumpToDef: function(cm) { jumpToDef(this, cm); },
 
+    recallDef: function(cm, c) { recallDef(this, cm, c); },
+
     jumpBack: function(cm) { jumpBack(this, cm); },
 
     rename: function(cm) { rename(this, cm); },
@@ -366,6 +368,23 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       dialog(cm, "Jump to variable", function(name) { if (name) inner(name); });
     else
       inner();
+  }
+
+  function recallDef(ts, cm, c) {
+    if (!atInterestingExpression(cm)) {
+      c();
+    } else {
+      var req = {type: "definition", variable: null};
+      var doc = findDoc(ts, cm.getDoc());
+      ts.server.request(buildRequest(ts, doc, req), function(error, data) {
+        if (error) return c({result: "failed", msg: error});
+        if (data.file) {
+          c({result: "ok", data: data});
+          return;
+        }
+        c({result: "failed", msg: "Could not find a definition"});
+      });
+    }
   }
 
   function jumpBack(ts, cm) {
