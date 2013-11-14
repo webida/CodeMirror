@@ -106,6 +106,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     showType: function(cm) { showType(this, cm); },
 
+    closeArgHints: function (cm) { closeArgHints(this); },
+
     updateArgHints: function(cm) { updateArgHints(this, cm); },
 
     jumpToDef: function(cm) { jumpToDef(this, cm); },
