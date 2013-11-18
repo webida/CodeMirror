@@ -192,6 +192,11 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
   function hint(ts, cm, c) {
     ts.request(cm, {type: "completions", types: true, docs: true, urls: true, caseInsensitive: true}, function(error, data) {
       if (error) return showError(ts, cm, error);
+
+      if (ts.options.onShowHints && ts.options.onShowHints(ts, cm)) {
+        return;
+      }
+
       var completions = [], after = "";
       var from = data.start, to = data.end;
 
@@ -317,6 +322,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   function showArgHints(ts, cm, pos) {
     closeArgHints(ts);
+
+    if (ts.options.onShowArgHints && ts.options.onShowArgHints(ts, cm)) {
+      return;
+    }
 
     var cache = ts.cachedArgHints, tp = cache.type;
     var tip = elt("span", cache.guess ? cls + "fhint-guess" : null,
