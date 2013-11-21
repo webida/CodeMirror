@@ -396,7 +396,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       var doc = findDoc(ts, cm.getDoc());
       ts.server.request(buildRequest(ts, doc, req), function(error, data) {
         if (error) return c({result: "failed", msg: error});
-        if (data.file) {
+        if (data && data.file) {
           c({result: "ok", data: data});
           return;
         }
