@@ -123,6 +123,20 @@ define(['lib/codemirror/lib/codemirror', 'underscore'], function(CodeMirror, _) 
     }
   }
 
-  CodeMirror.registerHelper("hint", "css", getHints);
+  function getHints2(cm, callback) {
+    if (typeof callback !== 'function') {
+      callback = null;
+    }
+
+    var data = getHints(cm);
+
+    if (callback) {
+      callback(data);
+    } else {
+      return data;
+    }
+  }
+
+  CodeMirror.registerHelper("hint", "css", getHints2);
 })();
 });
