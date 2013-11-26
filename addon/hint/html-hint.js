@@ -333,7 +333,23 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     if (options) for (var opt in options) local[opt] = options[opt];
     return CodeMirror.hint.xml(cm, local);
   }
-  CodeMirror.htmlHint = htmlHint; // deprecated
-  CodeMirror.registerHelper("hint", "html", htmlHint);
+
+  function htmlHint2(cm, callback, options) {
+    if (typeof callback !== 'function') {
+      options = callback;
+      callback = null;
+    }
+
+    var data = htmlHint(cm, options);
+
+    if (callback) {
+      callback(data);
+    } else {
+      return data;
+    }
+  }
+
+  CodeMirror.htmlHint = htmlHint2; // deprecated
+  CodeMirror.registerHelper("hint", "html", htmlHint2);
 })();
 });
