@@ -33,7 +33,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       // Attribute completion
       var curTag = tags[inner.state.tagName], attrs = curTag && curTag.attrs;
       if (!attrs) return;
-      if (token.type == "string" || token.string == "=") { // A value
+      if (token.type == "string" || token.type == "link" || token.string == "=") { // A value
         var before = cm.getRange(Pos(cur.line, Math.max(0, cur.ch - 60)),
                                  Pos(cur.line, token.type == "string" ? token.start : token.end));
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
