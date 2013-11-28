@@ -42,7 +42,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     pick: function(data, i) {
       var completion = data.list[i];
       if (completion.hint) completion.hint(this.cm, data, completion);
-      else this.cm.replaceRange(getText(completion), data.from, data.to, "hint");
+      else this.cm.replaceRange(getText(completion), data.from, data.to, data.hintContinue ? "hint-continue" : "hint");
       this.close();
     },
 
