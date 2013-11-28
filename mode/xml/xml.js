@@ -33,7 +33,14 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       'tr': {'tr': true}
     },
     resourceAttributes: {
+      'a': {'href': true},
+      'area': {'href': true},
+      'base': {'href': true},
       'link': {'href': true},
+      'frame': {'src': true},
+      'iframe': {'src': true},
+      'img': {'src': true},
+      'input': {'src': true},
       'script': {'src': true}
     },
     doNotIndent: {"pre": true},
