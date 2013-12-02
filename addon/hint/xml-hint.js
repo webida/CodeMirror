@@ -33,12 +33,12 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       // Attribute completion
       var curTag = tags[inner.state.tagName], attrs = curTag && curTag.attrs;
       if (!attrs) return;
-      if (token.type == "string" || token.type == "link" || token.string == "=") { // A value
+      if (/\bstring\b/.test(token.type) || /\blink\b/.test(token.type) || token.string == "=") { // A value
         var before = cm.getRange(Pos(cur.line, Math.max(0, cur.ch - 60)),
-                                 Pos(cur.line, token.type == "string" ? token.start : token.end));
+                                 Pos(cur.line, token.type == /\bstring\b/.test(token.type) ? token.start : token.end));
         var atName = before.match(/([^\s\u00a0=<>\"\']+)=$/), atValues;
         if (!atName || !attrs.hasOwnProperty(atName[1]) || !(atValues = attrs[atName[1]])) return;
-        if (token.type == "string") {
+        if (/\bstring\b/.test(token.type)) {
           prefix = token.string;
           if (/['"]/.test(token.string.charAt(0))) {
             quote = token.string.charAt(0);
