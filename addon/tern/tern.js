@@ -104,7 +104,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     getHint: function(cm, c) { return hint(this, cm, c); },
 
-    showType: function(cm) { showType(this, cm); },
+    showType: function(cm, pos) { showType(this, cm, pos); },
 
     closeArgHints: function (cm) { closeArgHints(this); },
 
@@ -118,10 +118,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     rename: function(cm) { rename(this, cm); },
 
-    request: function (cm, query, c) {
+    request: function (cm, query, c, pos) {
       var self = this;
       var doc = findDoc(this, cm.getDoc());
-      var request = buildRequest(this, doc, query);
+      var request = buildRequest(this, doc, query, pos);
 
       this.server.request(request, function (error, data) {
         if (!error && self.options.responseFilter)
@@ -242,7 +242,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   // Type queries
 
-  function showType(ts, cm) {
+  function showType(ts, cm, pos) {
     ts.request(cm, "type", function(error, data) {
       if (error) return showError(ts, cm, error);
       if (ts.options.typeTip) {
@@ -259,7 +259,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         }
       }
       tempTooltip(cm, tip);
-    });
+    }, pos);
   }
 
   // Maintaining argument hints
@@ -490,13 +490,13 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   // Generic request-building helper
 
-  function buildRequest(ts, doc, query) {
+  function buildRequest(ts, doc, query, pos) {
     var files = [], offsetLines = 0, allowFragments = !query.fullDocs;
     if (!allowFragments) delete query.fullDocs;
     if (typeof query == "string") query = {type: query};
     query.lineCharPositions = true;
     if (query.end == null) {
-      query.end = doc.doc.getCursor("end");
+      query.end = pos || doc.doc.getCursor("end");
       if (doc.doc.somethingSelected())
         query.start = doc.doc.getCursor("start");
     }
