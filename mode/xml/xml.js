@@ -33,7 +33,14 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       'tr': {'tr': true}
     },
     resourceAttributes: {
+      'a': {'href': true},
+      'area': {'href': true},
+      'base': {'href': true},
       'link': {'href': true},
+      'frame': {'src': true},
+      'iframe': {'src': true},
+      'img': {'src': true},
+      'input': {'src': true},
       'script': {'src': true}
     },
     doNotIndent: {"pre": true},
@@ -136,7 +143,11 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
           break;
         }
       }
-      return "string";
+      if (state.attrName !== undefined) {
+        return "string " + "attr-value-" + state.attrName;
+      } else {
+        return "string";
+      }
     };
     closure.isInAttribute = true;
     return closure;
@@ -277,15 +288,18 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     return (type == "endTag" || type == "selfcloseTag") ? pass() : cont();
   }
   function attvalue(type) {
-    if (type == "string") {
-      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][curState.attrName]) {
+    var attrName = curState.attrName;
+    curState.attrName = undefined;
+
+    if (/\bstring\b/.test(type)) {
+      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][attrName]) {
         setStyle = "link";
       }
       return cont(attvaluemaybe);
     }
-    if (type == "word" && Kludges.allowUnquoted) {
+    if (/\bword\b/.test(type) && Kludges.allowUnquoted) {
       setStyle = "string";
-      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][curState.attrName]) {
+      if (Kludges.resourceAttributes[curState.tagName] && Kludges.resourceAttributes[curState.tagName][attrName]) {
         setStyle = "link";
       }
       return cont();
