@@ -71,6 +71,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (!cursor.find(rev)) return;
     }
     cm.setSelection(cursor.from(), cursor.to());
+    cm.scrollIntoView({from: cursor.from(), to: cursor.to()});
     state.posFrom = cursor.from(); state.posTo = cursor.to();
   });}
   function clearSearch(cm) {cm.operation(function() {
@@ -109,6 +110,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
                   (start && cursor.from().line == start.line && cursor.from().ch == start.ch)) return;
             }
             cm.setSelection(cursor.from(), cursor.to());
+            cm.scrollIntoView({from: cursor.from(), to: cursor.to()});
             confirmDialog(cm, doReplaceConfirm, "Replace?",
                           [function() {doReplace(match);}, advance]);
           };

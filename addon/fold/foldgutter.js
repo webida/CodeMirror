@@ -11,6 +11,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       cm.off("viewportChange", onViewportChange);
       cm.off("fold", onFold);
       cm.off("unfold", onFold);
+      cm.off("swapDoc", updateInViewport);
     }
     if (val) {
       cm.state.foldGutter = new State(parseOptions(val));
@@ -20,6 +21,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       cm.on("viewportChange", onViewportChange);
       cm.on("fold", onFold);
       cm.on("unfold", onFold);
+      cm.on("swapDoc", updateInViewport);
     }
   });
 
@@ -87,14 +89,14 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
   }
 
   function onChange(cm) {
-    var state = cm.state.foldGutter;
+    var state = cm.state.foldGutter, opts = cm.state.foldGutter.options;
     state.from = state.to = 0;
     clearTimeout(state.changeUpdate);
-    state.changeUpdate = setTimeout(function() { updateInViewport(cm); }, 600);
+    state.changeUpdate = setTimeout(function() { updateInViewport(cm); }, opts.foldOnChangeTimeSpan || 600);
   }
 
   function onViewportChange(cm) {
-    var state = cm.state.foldGutter;
+    var state = cm.state.foldGutter, opts = cm.state.foldGutter.options;
     clearTimeout(state.changeUpdate);
     state.changeUpdate = setTimeout(function() {
       var vp = cm.getViewport();
@@ -112,7 +114,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
           }
         });
       }
-    }, 400);
+    }, opts.updateViewportTimeSpan || 400);
   }
 
   function onFold(cm, from) {
