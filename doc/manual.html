@@ -1209,6 +1209,9 @@
         <a href="#event_clear"><code>"clear"</code></a> event
         fired on the range handle can be used to be notified when this
         happens.</dd>
+        <dt id="mark_clearWhenEmpty"><code><strong>clearWhenEmpty</strong>: boolean</code></dt>
+        <dd>Determines whether the mark is automatically cleared when
+        it becomes empty. Default is true.</dd>
         <dt id="mark_replacedWith"><code><strong>replacedWith</strong>: Element</code></dt>
         <dd>Use a given node to display this range. Implies both
         collapsed and atomic. The given DOM node <em>must</em> be an
@@ -1273,7 +1276,7 @@
         <dt><code><strong>widget</strong>: Element</code></dt><dd>Can be used to display a DOM
         node at the current location of the bookmark (analogous to
         the <a href="#mark_replacedWith"><code>replacedWith</code></a>
-        option to <code>markText</code>).</dd>
+        option to <a href="#markText"><code>markText</code></a>).</dd>
         <dt><code><strong>insertLeft</strong>: boolean</code></dt><dd>By default, text typed
         when the cursor is on top of the bookmark will end up to the
         right of the bookmark. Set this option to true to make it go

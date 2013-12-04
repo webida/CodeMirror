@@ -436,6 +436,36 @@ testCM("markTextStayGone", function(cm) {
   eq(m1.find(), null);
 }, {value: "hello"});
 
+testCM("markTextAllowEmpty", function(cm) {
+  var m1 = cm.markText(Pos(0, 1), Pos(0, 2), {clearWhenEmpty: false});
+  is(m1.find());
+  cm.replaceRange("x", Pos(0, 0));
+  is(m1.find());
+  cm.replaceRange("y", Pos(0, 2));
+  is(m1.find());
+  cm.replaceRange("z", Pos(0, 3), Pos(0, 4));
+  is(!m1.find());
+  var m2 = cm.markText(Pos(0, 1), Pos(0, 2), {clearWhenEmpty: false,
+                                              inclusiveLeft: true,
+                                              inclusiveRight: true});
+  cm.replaceRange("q", Pos(0, 1), Pos(0, 2));
+  is(m2.find());
+  cm.replaceRange("", Pos(0, 0), Pos(0, 3));
+  is(!m2.find());
+  var m3 = cm.markText(Pos(0, 1), Pos(0, 1), {clearWhenEmpty: false});
+  cm.replaceRange("a", Pos(0, 3));
+  is(m3.find());
+  cm.replaceRange("b", Pos(0, 1));
+  is(!m3.find());
+}, {value: "abcde"});
+
+testCM("markTextStacked", function(cm) {
+  var m1 = cm.markText(Pos(0, 0), Pos(0, 0), {clearWhenEmpty: false});
+  var m2 = cm.markText(Pos(0, 0), Pos(0, 0), {clearWhenEmpty: false});
+  cm.replaceRange("B", Pos(0, 1));
+  is(m1.find() && m2.find());
+}, {value: "A"});
+
 testCM("undoPreservesNewMarks", function(cm) {
   cm.markText(Pos(0, 3), Pos(0, 4));
   cm.markText(Pos(1, 1), Pos(1, 3));
@@ -1141,7 +1171,7 @@ testCM("verticalMovementCommandsWrapping", function(cm) {
 
 testCM("rtlMovement", function(cm) {
   forEach(["خحج", "خحabcخحج", "abخحخحجcd", "abخde", "abخح2342خ1حج", "خ1ح2خح3حxج",
-           "خحcd", "1خحcd", "abcdeح1ج", "خمرحبها مها!", "foobarر",
+           "خحcd", "1خحcd", "abcdeح1ج", "خمرحبها مها!", "foobarر", "خ ة ق",
            "<img src=\"/בדיקה3.jpg\">"], function(line) {
     var inv = line.charAt(0) == "خ";
     cm.setValue(line + "\n"); cm.execCommand(inv ? "goLineEnd" : "goLineStart");

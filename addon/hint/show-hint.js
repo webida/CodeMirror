@@ -45,7 +45,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     pick: function(data, i) {
       var completion = data.list[i];
       if (completion.hint) completion.hint(this.cm, data, completion);
-      else this.cm.replaceRange(getText(completion), data.from, data.to, data.hintContinue ? "hint-continue" : "hint");
+      else this.cm.replaceRange(getText(completion), data.from, data.to);
+      CodeMirror.signal(data, "pick", completion);
       this.close();
     },
 
@@ -153,9 +154,9 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     return ourMap;
   }
 
-  function getHintElement(stopAt, el) {
-    while (el && el != stopAt) {
-      if (el.nodeName.toUpperCase() === "LI") return el;
+  function getHintElement(hintsElement, el) {
+    while (el && el != hintsElement) {
+      if (el.nodeName.toUpperCase() === "LI" && el.parentNode == hintsElement) return el;
       el = el.parentNode;
     }
   }
