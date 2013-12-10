@@ -4,7 +4,11 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   var WORD = /[\w$]+/, RANGE = 500;
 
-  CodeMirror.registerHelper("hint", "anyword", function(editor, options) {
+  CodeMirror.registerHelper("hint", "anyword", function(editor, callback, options) {
+    if (typeof callback !== 'function') {
+      options = callback;
+      callback = null;
+    }
     var word = options && options.word || WORD;
     var range = options && options.range || RANGE;
     var cur = editor.getCursor(), curLine = editor.getLine(cur.line);
@@ -30,7 +34,13 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     }
     scan(-1);
     scan(1);
-    return {list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end)};
+
+    var data = {list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end)};
+    if (!callback) {
+      return data;
+    } else {
+      callback(data);
+    }
   });
 })();
 });
