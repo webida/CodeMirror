@@ -93,13 +93,9 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (found && found.changed) sendDoc(this, found);
     },
 
-    complete: function(cm, c, options) {
+    complete: function(cm) {
       var self = this;
-      CodeMirror.showHint(cm, function(cm, c2) {
-        var ret = hint(self, cm, c2);
-        if (c) c();
-        return ret;
-      }, {async: true, completeSingle: options && options.completeSingle});
+      CodeMirror.showHint(cm, function(cm, c) { return hint(self, cm, c); }, {async: true});
     },
 
     getHint: function(cm, c) { return hint(this, cm, c); },
@@ -194,6 +190,9 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (error) return showError(ts, cm, error);
 
       if (ts.options.onShowHints && ts.options.onShowHints(ts, cm)) {
+        return;
+      }
+      if (!data) {
         return;
       }
 
