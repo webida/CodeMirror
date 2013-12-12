@@ -15,8 +15,15 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     var completion = cm.state.completionActive = new Completion(cm, getHints, options || {});
     CodeMirror.signal(cm, "startCompletion", cm);
-    if (completion.options.async)
-      getHints(cm, function(hints) { completion.showHints(hints); }, completion.options);
+    if (completion.options.async) {
+      var oldCursor = cm.getCursor();
+      getHints(cm, function(hints) {
+        var newCursor = cm.getCursor();
+        if (newCursor.line === oldCursor.line && newCursor.ch === oldCursor.ch) {
+          completion.showHints(hints);
+        }
+      }, completion.options);
+    }
     else
       return completion.showHints(getHints(cm, completion.options));
   };
