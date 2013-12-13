@@ -189,9 +189,6 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     ts.request(cm, {type: "completions", types: true, docs: true, urls: true, caseInsensitive: true}, function(error, data) {
       if (error) return showError(ts, cm, error);
 
-      if (ts.options.onShowHints && ts.options.onShowHints(ts, cm)) {
-        return;
-      }
       if (!data) {
         return;
       }
@@ -372,10 +369,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         if (!data.file && data.url) { window.open(data.url); return; }
 
         if (data.file) {
-            if (ts.options.moveToPosition) {
-                ts.options.moveToPosition(data);
-            }
-            return;
+          if (ts.options.moveToPosition) {
+            ts.options.moveToPosition(data);
+          }
+          return;
         }
         showError(ts, cm, "Could not find a definition.");
       });

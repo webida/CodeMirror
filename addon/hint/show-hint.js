@@ -58,6 +58,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     },
 
     showHints: function(data) {
+      if (this.options.beforeShowHints && this.options.beforeShowHints(this.cm)) {
+        return;
+      }
+
       if (!data || !data.list.length || !this.active()) return this.close();
 
       if (this.options.completeSingle != false && data.list.length == 1)
