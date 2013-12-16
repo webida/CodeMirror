@@ -1656,10 +1656,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         cm.scrollTo(null, y);
       },
       scrollUp: function(cm, actionArgs) {
-        CodeMirror.commands.scrollUp(cm);
+        CodeMirror.commands.scrollUp(cm, true);
       },
       scrollDown: function(cm, actionArgs) {
-        CodeMirror.commands.scrollDown(cm);
+        CodeMirror.commands.scrollDown(cm, true);
       },
       replayMacro: function(cm, actionArgs) {
         var registerName = actionArgs.selectedCharacter;
