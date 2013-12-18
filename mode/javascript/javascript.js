@@ -100,7 +100,23 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
         return ret("comment", "comment");
       } else if (state.lastType == "operator" || state.lastType == "keyword c" ||
                state.lastType == "sof" || /^[\[{}\(,;:]$/.test(state.lastType)) {
-        nextUntilUnescaped(stream, "/");
+        var consumeRegexp = function () {
+          var inclass = false, escaped = false, next;
+          while ((next = stream.next()) != null) {
+            if (next == "/" && !escaped && !inclass)
+              return false;
+            if (!escaped && next === '[') {
+              inclass = true;
+            } else {
+              escaped = !escaped && next == "\\";
+            }
+            if (inclass && !escaped && next === ']') {
+              inclass = false;
+            }
+          }
+          return escaped;
+        };
+        consumeRegexp();
         stream.eatWhile(/[gimy]/); // 'y' is "sticky" option in Mozilla
         return ret("regexp", "string-2");
       } else {
