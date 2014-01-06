@@ -30,9 +30,19 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
       state.tokenize = tokenString(ch);
       return state.tokenize(stream, state);
     }
-    else if (ch == "#") {
-      stream.eatWhile(/[\w\\\-]/);
-      return ret("atom", "hash");
+    // underscore property hack for IE
+    else if (ch === "_") {
+      return ret("meta", "meta");
+    }
+    else if (ch === "#") {
+      // sharp property hack for IE
+      if (state.stack && state.stack.length > 0 && state.stack[0] === "rule" &&
+        state.stack[state.stack.length - 1] !== "propertyValue") {
+        return ret("meta", "meta");
+      } else {
+        stream.eatWhile(/[\w\\\-]/);
+        return ret("atom", "hash");
+      }
     }
     else if (ch == "!") {
       stream.match(/^\s*\w*/);
@@ -62,7 +72,10 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     else if (/[;{}\[\]\(\)]/.test(ch)) {
       return ret(null, ch);
     }
-    else if (ch == "u" && stream.match("rl(")) {
+    else if ((ch == "u" && stream.match("rl(")) ||
+        ((ch == "a" || ch =="A") && stream.match("lpha(")) ||
+        (ch == "l" && stream.match("inear-gradient(")) ||
+        (ch == "e" && stream.match("xpression"))) {
       stream.backUp(1);
       state.tokenize = tokenParenthesized;
       return ret("property", "variable");
@@ -73,12 +86,19 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     }
   }
 
-  function tokenString(quote, nonInclusive) {
+  function tokenString(quote, nonInclusive, openingQuote) {
     return function(stream, state) {
       var escaped = false, ch;
+      var quoteOpened = 1;
       while ((ch = stream.next()) != null) {
-        if (ch == quote && !escaped)
+        if (ch == quote && !escaped) {
+            quoteOpened--;
+        } else if (ch == openingQuote && !escaped) {
+            quoteOpened++;
+        }
+        if (quoteOpened === 0) {
           break;
+        }
         escaped = !escaped && ch == "\\";
       }
       if (!escaped) {
@@ -92,7 +112,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
   function tokenParenthesized(stream, state) {
     stream.next(); // Must be '('
     if (!stream.match(/\s*[\"\']/, false))
-      state.tokenize = tokenString(")", true);
+      state.tokenize = tokenString(")", true, "(");
     else
       state.tokenize = tokenBase;
     return ret(null, "(");
@@ -425,7 +445,10 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin",
     "stroke-miterlimit", "stroke-opacity", "stroke-width", "text-rendering",
     "baseline-shift", "dominant-baseline", "glyph-orientation-horizontal",
-    "glyph-orientation-vertical", "kerning", "text-anchor", "writing-mode"
+    "glyph-orientation-vertical", "kerning", "text-anchor", "writing-mode",
+    // webida added
+    "border-radius-topleft", "border-radius-topright", "border-radius-bottomleft", "border-radius-bottomright",
+    "overflow-scrolling", "tap-highlight-color", "touch-callout", "user-focus", "user-input", "user-select"
   ]);
 
   var colorKeywords = keySet([
@@ -539,7 +562,9 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "vertical", "vertical-text", "visible", "visibleFill", "visiblePainted",
     "visibleStroke", "visual", "w-resize", "wait", "wave", "wider",
     "window", "windowframe", "windowtext", "x-large", "x-small", "xor",
-    "xx-large", "xx-small"
+    "xx-large", "xx-small",
+    // webida added
+    "touch"
   ]);
 
   function tokenCComment(stream, state) {
