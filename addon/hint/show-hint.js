@@ -1,5 +1,11 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
-(function() {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
   "use strict";
 
   var HINT_ELEMENT_CLASS        = "CodeMirror-hint";
@@ -7,9 +13,11 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   CodeMirror.showHint = function(cm, getHints, options) {
     // We want a single cursor position.
-    if (cm.somethingSelected()) return;
-    if (getHints == null) getHints = cm.getHelper(cm.getCursor(), "hint");
-    if (getHints == null) return;
+    if (cm.listSelections().length > 1 || cm.somethingSelected()) return;
+    if (getHints == null) {
+      if (options && options.async) return;
+      else getHints = CodeMirror.hint.auto;
+    }
 
     if (cm.state.completionActive) cm.state.completionActive.close();
 
@@ -52,7 +60,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     pick: function(data, i) {
       var completion = data.list[i];
       if (completion.hint) completion.hint(this.cm, data, completion);
-      else this.cm.replaceRange(getText(completion), data.from, data.to);
+      else this.cm.replaceRange(getText(completion), completion.from || data.from,
+                                completion.to || data.to, "complete");
       CodeMirror.signal(data, "pick", completion);
       this.close();
     },
@@ -80,9 +89,14 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       this.widget = new Widget(this, data);
       CodeMirror.signal(data, "shown");
 
-      var debounce = null, completion = this, finished;
+      var debounce = 0, completion = this, finished;
       var closeOn = this.options.closeCharacters || /[\s()\[\]{};:>,]/;
       var startPos = this.cm.getCursor(), startLen = this.cm.getLine(startPos.line).length;
+
+      var requestAnimationFrame = window.requestAnimationFrame || function(fn) {
+        return setTimeout(fn, 1000/60);
+      };
+      var cancelAnimationFrame = window.cancelAnimationFrame || clearTimeout;
 
       function done() {
         if (finished) return;
@@ -104,21 +118,26 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
         data = data_;
         if (finished) return;
         if (!data || !data.list.length) return done();
-        if (completion.widget) {
-          completion.widget.close();
-        }
+        if (completion.widget) completion.widget.close();
         completion.widget = new Widget(completion, data);
       }
 
+      function clearDebounce() {
+        if (debounce) {
+          cancelAnimationFrame(debounce);
+          debounce = 0;
+        }
+      }
+
       function activity() {
-        clearTimeout(debounce);
+        clearDebounce();
         var pos = completion.cm.getCursor(), line = completion.cm.getLine(pos.line);
         if (pos.line != startPos.line || line.length - pos.ch != startLen - startPos.ch ||
             pos.ch < startPos.ch || completion.cm.somethingSelected() ||
             (pos.ch && closeOn.test(line.charAt(pos.ch - 1)))) {
           completion.close();
         } else {
-          debounce = setTimeout(update, 170);
+          debounce = requestAnimationFrame(update);
           if (completion.widget) completion.widget.close();
         }
       }
@@ -200,25 +219,30 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     var winW = window.innerWidth || Math.max(document.body.offsetWidth, document.documentElement.offsetWidth);
     var winH = window.innerHeight || Math.max(document.body.offsetHeight, document.documentElement.offsetHeight);
     (options.container || document.body).appendChild(hints);
-    var box = hints.getBoundingClientRect();
-    var overlapX = box.right - winW, overlapY = box.bottom - winH;
+    var box = hints.getBoundingClientRect(), overlapY = box.bottom - winH;
+    if (overlapY > 0) {
+      var height = box.bottom - box.top, curTop = box.top - (pos.bottom - pos.top);
+      if (curTop - height > 0) { // Fits above cursor
+        hints.style.top = (top = curTop - height) + "px";
+        below = false;
+      } else if (height > winH) {
+        hints.style.height = (winH - 5) + "px";
+        hints.style.top = (top = pos.bottom - box.top) + "px";
+        var cursor = cm.getCursor();
+        if (data.from.ch != cursor.ch) {
+          pos = cm.cursorCoords(cursor);
+          hints.style.left = (left = pos.left) + "px";
+          box = hints.getBoundingClientRect();
+        }
+      }
+    }
+    var overlapX = box.left - winW;
     if (overlapX > 0) {
       if (box.right - box.left > winW) {
         hints.style.width = (winW - 5) + "px";
         overlapX -= (box.right - box.left) - winW;
       }
       hints.style.left = (left = pos.left - overlapX) + "px";
-    }
-    if (overlapY > 0) {
-      var height = box.bottom - box.top;
-      if (box.top - (pos.bottom - pos.top) - height > 0) {
-        overlapY = height + (pos.bottom - pos.top);
-        below = false;
-      } else if (height > winH) {
-        hints.style.height = (winH - 5) + "px";
-        overlapY -= height - winH;
-      }
-      hints.style.top = (top = pos.bottom - overlapY) + "px";
     }
 
     cm.addKeyMap(this.keyMap = buildKeyMap(options, {
@@ -227,7 +251,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       menuSize: function() { return widget.screenAmount(); },
       length: completions.length,
       close: function() { completion.close(); },
-      pick: function() { widget.pick(); }
+      pick: function() { widget.pick(); },
+      data: data
     }));
 
     if (options.closeOnUnfocus !== false) {
@@ -254,7 +279,10 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     CodeMirror.on(hints, "click", function(e) {
       var t = getHintElement(hints, e.target || e.srcElement);
-      if (t && t.hintId != null) widget.changeActive(t.hintId);
+      if (t && t.hintId != null) {
+        widget.changeActive(t.hintId);
+        if (options.completeOnSingleClick) widget.pick();
+      }
     });
 
     CodeMirror.on(hints, "mousedown", function() {
@@ -305,5 +333,36 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       return Math.floor(this.hints.clientHeight / this.hints.firstChild.offsetHeight) || 1;
     }
   };
-})();
+
+  CodeMirror.registerHelper("hint", "auto", function(cm, options) {
+    var helpers = cm.getHelpers(cm.getCursor(), "hint"), words;
+    if (helpers.length) {
+      for (var i = 0; i < helpers.length; i++) {
+        var cur = helpers[i](cm, options);
+        if (cur && cur.list.length) return cur;
+      }
+    } else if (words = cm.getHelper(cm.getCursor(), "hintWords")) {
+      if (words) return CodeMirror.hint.fromList(cm, {words: words});
+    } else if (CodeMirror.hint.anyword) {
+      return CodeMirror.hint.anyword(cm, options);
+    }
+  });
+
+  CodeMirror.registerHelper("hint", "fromList", function(cm, options) {
+    var cur = cm.getCursor(), token = cm.getTokenAt(cur);
+    var found = [];
+    for (var i = 0; i < options.words.length; i++) {
+      var word = options.words[i];
+      if (word.slice(0, token.string.length) == token.string)
+        found.push(word);
+    }
+
+    if (found.length) return {
+      list: found,
+      from: CodeMirror.Pos(cur.line, token.start),
+            to: CodeMirror.Pos(cur.line, token.end)
+    };
+  });
+
+  //CodeMirror.commands.autocomplete = CodeMirror.showHint;
 });

@@ -1,4 +1,13 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
 CodeMirror.defineMode("yaml", function() {
 
   var cons = ['true', 'false', 'on', 'off', 'yes', 'no'];
@@ -96,4 +105,5 @@ CodeMirror.defineMode("yaml", function() {
 });
 
 CodeMirror.defineMIME("text/x-yaml", "yaml");
+
 });

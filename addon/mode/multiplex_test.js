@@ -1,4 +1,3 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 (function() {
   CodeMirror.defineMode("markdown_with_stex", function(){
     var inner = CodeMirror.getMode({}, "stex");
@@ -29,4 +28,3 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     "stexInsideMarkdown",
     "[strong **Equation:**] [delim $][inner&tag \\pi][delim $]");
 })();
-});

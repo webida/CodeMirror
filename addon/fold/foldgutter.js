@@ -1,5 +1,11 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
-(function() {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"), require("./foldcode"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror", "./foldcode"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
   "use strict";
 
   CodeMirror.defineOption("foldGutter", false, function(cm, val, old) {
@@ -63,7 +69,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       if (isFolded(cm, cur)) {
         mark = marker(opts.indicatorFolded);
       } else {
-        var pos = Pos(cur, 0), func = opts.rangeFinder || cm.getHelper(pos, "fold");
+        var pos = Pos(cur, 0), func = opts.rangeFinder || CodeMirror.fold.auto;
         var range = func && func(cm, pos);
         if (range && range.from.line < range.to.line)
           mark = marker(opts.indicatorOpen);
@@ -122,5 +128,4 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     if (line >= state.from && line < state.to)
       updateFoldInfo(cm, line, line + 1);
   }
-})();
 });

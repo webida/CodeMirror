@@ -1,4 +1,3 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 /***
     |''Name''|tiddlywiki.js|
     |''Description''|Enables TiddlyWikiy syntax highlighting using CodeMirror|
@@ -15,6 +14,17 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     CoreVersion parameter is needed for TiddlyWiki only!
 ***/
 //{{{
+
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
 CodeMirror.defineMode("tiddlywiki", function () {
   // Tokenizer
   var textwords = {};
@@ -351,5 +361,6 @@ CodeMirror.defineMode("tiddlywiki", function () {
 });
 
 CodeMirror.defineMIME("text/x-tiddlywiki", "tiddlywiki");
-//}}}
 });
+
+//}}}

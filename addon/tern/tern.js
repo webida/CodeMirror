@@ -1,4 +1,3 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // Glue code between CodeMirror and Tern.
 //
 // Create a CodeMirror.TernServer to wrap an actual Tern server,
@@ -20,8 +19,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 // * showError: A function(editor, message) that can be used to
 //   override the way errors are displayed.
 // * completionTip: Customize the content in tooltips for completions.
-//   Is passed a single argument—the completion's data as returned by
-//   Tern—and may return a string, DOM node, or null to indicate that
+//   Is passed a single argument�봳he completion's data as returned by
+//   Tern�봞nd may return a string, DOM node, or null to indicate that
 //   no tip should be shown. By default the docstring is shown.
 // * typeTip: Like completionTip, but for the tooltips shown for type
 //   queries.
@@ -41,7 +40,14 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 //   load. Or, if you minified those into a single script and included
 //   them in the workerScript, simply leave this undefined.
 
-(function() {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
   "use strict";
   // declare global: tern
 
@@ -114,6 +120,8 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     rename: function(cm) { rename(this, cm); },
 
+    selectName: function(cm) { selectName(this, cm); },
+
     request: function (cm, query, c, pos) {
       var self = this;
       var doc = findDoc(this, cm.getDoc());
@@ -178,7 +186,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   function sendDoc(ts, doc) {
     ts.server.request({files: [{type: "full", name: doc.name, text: docValue(ts, doc)}]}, function(error) {
-      if (error) console.error(error);
+      if (error) window.console.error(error);
       else doc.changed = null;
     });
   }
@@ -246,7 +254,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
       } else {
         var tip = elt("span", null, elt("strong", null, data.type || "not found"));
         if (data.doc)
-          tip.appendChild(document.createTextNode(" — " + data.doc));
+          tip.appendChild(document.createTextNode(" ��" + data.doc));
         if (data.url) {
           tip.appendChild(document.createTextNode(" "));
           var docsBtn = elt("a", null, "[docs]");
@@ -465,6 +473,25 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     });
   }
 
+  function selectName(ts, cm) {
+    var cur = cm.getCursor(), token = cm.getTokenAt(cur);
+    if (!/\w/.test(token.string)) showError(ts, cm, "Not at a variable");
+    var name = findDoc(ts, cm.doc).name;
+    ts.request(cm, {type: "refs"}, function(error, data) {
+      if (error) return showError(ts, cm, error);
+      var ranges = [], cur = 0;
+      for (var i = 0; i < data.refs.length; i++) {
+        var ref = data.refs[i];
+        if (ref.file == name) {
+          ranges.push({anchor: ref.start, head: ref.end});
+          if (cmpPos(cur, ref.start) >= 0 && cmpPos(cur, ref.end) <= 0)
+            cur = ranges.length - 1;
+        }
+      }
+      cm.setSelections(ranges, cur);
+    });
+  }
+
   var nextChangeOrig = 0;
   function applyChanges(ts, changes) {
     var perFile = Object.create(null);
@@ -557,7 +584,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
   // Generic utilities
 
-  function cmpPos(a, b) { return a.line - b.line || a.ch - b.ch; }
+  var cmpPos = CodeMirror.cmpPos;
 
   function elt(tagname, cls /*, ... elts*/) {
     var e = document.createElement(tagname);
@@ -660,7 +687,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
           send({type: "getFile", err: String(err), text: text, id: data.id});
         });
       } else if (data.type == "debug") {
-        console.log(data.message);
+        window.console.log(data.message);
       } else if (data.id && pending[data.id]) {
         pending[data.id](data.err, data.body);
         delete pending[data.id];
@@ -675,5 +702,4 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     this.delFile = function(name) { send({type: "del", name: name}); };
     this.request = function(body, c) { send({type: "req", body: body}, c); };
   }
-})();
 });

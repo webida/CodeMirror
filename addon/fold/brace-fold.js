@@ -1,4 +1,13 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
 CodeMirror.registerHelper("fold", "brace", function(cm, start) {
   var line = start.line, lineText = cm.getLine(line);
   var startCh, tokenType;
@@ -46,7 +55,6 @@ CodeMirror.registerHelper("fold", "brace", function(cm, start) {
   return {from: CodeMirror.Pos(line, startCh),
           to: CodeMirror.Pos(end, endCh)};
 });
-CodeMirror.braceRangeFinder = CodeMirror.fold.brace; // deprecated
 
 CodeMirror.registerHelper("fold", "import", function(cm, start) {
   function hasImport(line) {
@@ -71,7 +79,6 @@ CodeMirror.registerHelper("fold", "import", function(cm, start) {
   }
   return {from: cm.clipPos(CodeMirror.Pos(start, has.startCh + 1)), to: end};
 });
-CodeMirror.importRangeFinder = CodeMirror.fold["import"]; // deprecated
 
 CodeMirror.registerHelper("fold", "include", function(cm, start) {
   function hasInclude(line) {
@@ -91,5 +98,5 @@ CodeMirror.registerHelper("fold", "include", function(cm, start) {
   return {from: CodeMirror.Pos(start, has + 1),
           to: cm.clipPos(CodeMirror.Pos(end))};
 });
-CodeMirror.includeRangeFinder = CodeMirror.fold.include; // deprecated
+
 });
