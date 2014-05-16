@@ -1,4 +1,4 @@
-define(['lib/codemirror/lib/codemirror', 'underscore'], function(CodeMirror, _) {
+define(['lib/codemirror/lib/codemirror', 'all-lib/underscore/lodash.min'], function(CodeMirror, _) {
 (function () {
   "use strict";
 
