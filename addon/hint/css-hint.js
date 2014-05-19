@@ -2,7 +2,7 @@
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"), require("../../mode/css/css"), require("underscore"));
   else if (typeof define == "function" && define.amd) // AMD
-    define(["../../lib/codemirror", "../../mode/css/css", "underscore"], mod);
+    define(["../../lib/codemirror", "../../mode/css/css", "all-lib/underscore/lodash.min"], mod);
   else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
@@ -21,7 +21,7 @@
     if (/[^\w$_-]/.test(word)) {
       word = ""; start = end = cur.ch;
     }
-    
+
     var spec = CodeMirror.resolveMode("text/css");
 
     function commonstring(str, sub) {
@@ -84,7 +84,7 @@
         })(str, sub, common.reverse());
       }
     }
-    
+
     var tstr = word.toLowerCase();
     var result = [];
     var allKeywords = [];
@@ -101,7 +101,7 @@
         }
       }
     }
-    
+
     var st = inner.state.state;
     if (st == "pseudo" || token.type == "variable-3") {
       add(pseudoClasses);
@@ -114,9 +114,9 @@
       add(spec.mediaTypes);
       add(spec.mediaFeatures);
     }
-    
+
     result = _.sortBy(result, function (item) { return -item.relevance; });
-    
+
     if (! _.isEmpty(result)) {
       return {
         list: result,
