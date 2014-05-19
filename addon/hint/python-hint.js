@@ -1,5 +1,13 @@
-define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
-(function () {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+  "use strict";
+
   function forEach(arr, f) {
     for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
   }
@@ -32,10 +40,6 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
 
     var completionList = getCompletions(token, context);
     completionList = completionList.sort();
-    //prevent autocomplete for last word, instead show dropdown with one word
-    if(completionList.length == 1) {
-      completionList.push(" ");
-    }
 
     return {list: completionList,
             from: CodeMirror.Pos(cur.line, token.start),
@@ -45,7 +49,6 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
   function pythonHint(editor) {
     return scriptHint(editor, pythonKeywordsU, function (e, cur) {return e.getTokenAt(cur);});
   }
-  CodeMirror.pythonHint = pythonHint; // deprecated
   CodeMirror.registerHelper("hint", "python", pythonHint);
 
   var pythonKeywords = "and del from not while as elif global or with assert else if pass yield"
@@ -67,7 +70,7 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
   function getCompletions(token, context) {
     var found = [], start = token.string;
     function maybeAdd(str) {
-      if (str.indexOf(start) == 0 && !arrayContains(found, str)) found.push(str);
+      if (str.lastIndexOf(start, 0) == 0 && !arrayContains(found, str)) found.push(str);
     }
 
     function gatherCompletions(_obj) {
@@ -93,5 +96,4 @@ define(['lib/codemirror/lib/codemirror'], function(CodeMirror) {
     }
     return found;
   }
-})();
 });

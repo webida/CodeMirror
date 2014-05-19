@@ -1,41 +1,28 @@
-define(['lib/codemirror/lib/codemirror', 'all-lib/underscore/lodash.min'], function(CodeMirror, _) {
-(function () {
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"), require("../../mode/css/css"), require("underscore"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror", "../../mode/css/css", "all-lib/underscore/lodash.min"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
   "use strict";
 
-  var spec = CodeMirror.resolveMode("text/css");
-  var propertyKeywords =_.keys(spec.propertyKeywords);
-  var valueKeywords = _.keys(spec.valueKeywords).concat(_.keys(spec.colorKeywords));
+  var pseudoClasses = {link: 1, visited: 1, active: 1, hover: 1, focus: 1,
+                       "first-letter": 1, "first-line": 1, "first-child": 1,
+                       before: 1, after: 1, lang: 1};
 
   function getHints(cm) {
     var cur = cm.getCursor(), token = cm.getTokenAt(cur);
     var inner = CodeMirror.innerMode(cm.getMode(), token.state);
     if (inner.mode.name != "css") return;
 
-    // If it's not a 'word-style' token, ignore the token.
-    if (!/^[\w$_-]*$/.test(token.string)) {
-      token = {
-        start: cur.ch, end: cur.ch, string: "", state: token.state,
-        type: null
-      };
-      var stack = token.state.stack;
-      var lastToken = stack && stack.length > 0 ? stack[stack.length - 1] : "";
-      if (token.string == ":" || lastToken.indexOf("property") == 0)
-        token.type = "variable";
-      else if (token.string == "{" || lastToken.indexOf("rule") == 0)
-        token.type = "property";
+    var word = token.string, start = token.start, end = token.end;
+    if (/[^\w$_-]/.test(word)) {
+      word = ""; start = end = cur.ch;
     }
 
-    if (!token.type)
-      return;
-
-    var keywords = null;
-    if (token.type.indexOf("property") == 0)
-      keywords = propertyKeywords;
-    else if (token.type.indexOf("variable") == 0)
-      keywords = valueKeywords;
-
-    if (!keywords)
-      return;
+    var spec = CodeMirror.resolveMode("text/css");
 
     function commonstring(str, sub) {
       function calculateCommon(strP, subP) {
@@ -97,26 +84,48 @@ define(['lib/codemirror/lib/codemirror', 'all-lib/underscore/lodash.min'], funct
         })(str, sub, common.reverse());
       }
     }
-    var tstr = token.string.toLowerCase();
-    var result = _.sortBy(_.compact(_.map(keywords, function (w) {
-      var renderer = commonstring(w, tstr);
-      if (renderer) {
-        return {
-          text: w,
-          render: renderer.render,
-          relevance: renderer.relevance
-        };
+
+    var tstr = word.toLowerCase();
+    var result = [];
+    var allKeywords = [];
+    function add(keywords) {
+      allKeywords = _.union(allKeywords, keywords);
+      for (var name in keywords) {
+        var renderer = commonstring(name, tstr);
+        if (renderer) {
+          result.push({
+            text: name,
+            render: renderer.render,
+            relevance: renderer.relevance
+          });
+        }
       }
-    })), function (item) { return -item.relevance; });
+    }
+
+    var st = inner.state.state;
+    if (st == "pseudo" || token.type == "variable-3") {
+      add(pseudoClasses);
+    } else if (st == "block" || st == "maybeprop") {
+      add(spec.propertyKeywords);
+    } else if (st == "prop" || st == "parens" || st == "at" || st == "params") {
+      add(spec.valueKeywords);
+      add(spec.colorKeywords);
+    } else if (st == "media" || st == "media_parens") {
+      add(spec.mediaTypes);
+      add(spec.mediaFeatures);
+    }
+
+    result = _.sortBy(result, function (item) { return -item.relevance; });
+
     if (! _.isEmpty(result)) {
       return {
         list: result,
-        from: CodeMirror.Pos(cur.line, token.start),
-        to: CodeMirror.Pos(cur.line, token.end)
+        from: CodeMirror.Pos(cur.line, start),
+        to: CodeMirror.Pos(cur.line, end)
       };
     } else {
       return {
-        list: keywords,
+        list: allKeywords,
         from: cur,
         to: cur
       };
@@ -138,5 +147,4 @@ define(['lib/codemirror/lib/codemirror', 'all-lib/underscore/lodash.min'], funct
   }
 
   CodeMirror.registerHelper("hint", "css", getHints2);
-})();
 });
