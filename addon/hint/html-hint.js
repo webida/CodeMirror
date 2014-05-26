@@ -68,7 +68,7 @@
         formmethod: methods,
         formnovalidate: ["", "novalidate"],
         formtarget: targets,
-        type: ["submit", "reset", "button"]
+        type: ["submit", "reset", "button", "menu"]
       }
     },
     canvas: { attrs: { width: null, height: null } },
