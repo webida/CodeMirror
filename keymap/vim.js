@@ -82,7 +82,9 @@
     { keys: ['<C-n>'], type: 'keyToKey', toKeys: ['j'] },
     { keys: ['<C-p>'], type: 'keyToKey', toKeys: ['k'] },
     { keys: ['<C-[>'], type: 'keyToKey', toKeys: ['<Esc>'] },
-    { keys: ['<C-c>'], type: 'keyToKey', toKeys: ['<Esc>'] },
+    { keys: ['<C-c>'], type: 'keyToKey', toKeys: ['<Esc>'] },	
+      	// The above line enables 'copy' by Ctrl-C in normal mode
+      	// 'Cut' (by Ctrl-X) and 'Paste' (by Ctrl-V) do not work in the normal mode.
     { keys: ['s'], type: 'keyToKey', toKeys: ['c', 'l'], context: 'normal' },
     { keys: ['s'], type: 'keyToKey', toKeys: ['x', 'i'], context: 'visual'},
     { keys: ['S'], type: 'keyToKey', toKeys: ['c', 'c'], context: 'normal' },
@@ -1121,7 +1123,7 @@
         }
         function onPromptKeyDown(e, _query, close) {
           var keyName = CodeMirror.keyName(e);
-          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[') {
+          if (keyName == 'Esc' || /*keyName == 'Ctrl-C' || */ keyName == 'Ctrl-[') {
             updateSearchQuery(cm, originalQuery);
             clearSearchHighlight(cm);
             cm.scrollTo(originalScrollPos.left, originalScrollPos.top);
@@ -1187,7 +1189,7 @@
         }
         function onPromptKeyDown(e, _input, close) {
           var keyName = CodeMirror.keyName(e);
-          if (keyName == 'Esc' || keyName == 'Ctrl-C' || keyName == 'Ctrl-[') {
+          if (keyName == 'Esc' || /*keyName == 'Ctrl-C' ||*/ keyName == 'Ctrl-[') {
             CodeMirror.e_stop(e);
             close();
             cm.focus();
@@ -3860,7 +3862,7 @@
             // fall through and exit.
           case 'Q':
           case 'Esc':
-          case 'Ctrl-C':
+          //case 'Ctrl-C':
           case 'Ctrl-[':
             stop(close);
             break;
@@ -3977,7 +3979,7 @@
       // indentation from o, O, i_<CR>
       'Esc': exitInsertMode,
       'Ctrl-[': exitInsertMode,
-      'Ctrl-C': exitInsertMode,
+      //'Ctrl-C': exitInsertMode,
       'Ctrl-N': 'autocomplete',
       'Ctrl-P': 'autocomplete',
       'Enter': function(cm) {
