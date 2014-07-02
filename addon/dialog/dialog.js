@@ -44,6 +44,7 @@
     if (inp) {
       if (options && options.value) inp.value = options.value;
       CodeMirror.on(inp, "keydown", function(e) {
+        CodeMirror.e_stopPropagation(e);
         if (options && options.onKeyDown && options.onKeyDown(e, inp.value, close)) { return; }
         if (e.keyCode == 13 || e.keyCode == 27) {
           inp.blur();
@@ -53,9 +54,12 @@
           if (e.keyCode == 13) callback(inp.value);
         }
       });
-      if (options && options.onKeyUp) {
-        CodeMirror.on(inp, "keyup", function(e) {options.onKeyUp(e, inp.value, close);});
-      }
+      CodeMirror.on(inp, "keyup", function(e) {
+        CodeMirror.e_stopPropagation(e);
+        if (options && options.onKeyUp) {
+          options.onKeyUp(e, inp.value, close);
+        }
+      });
       if (options && options.value) inp.value = options.value;
       inp.focus();
       CodeMirror.on(inp, "blur", close);
