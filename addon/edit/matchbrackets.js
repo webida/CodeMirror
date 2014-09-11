@@ -13,6 +13,7 @@
 
   var matching = {"(": ")>", ")": "(<", "[": "]>", "]": "[<", "{": "}>", "}": "{<"};
 
+    /*  WTC-2684
   function findMatchingBracket(cm, where, strict, config) {
     var line = cm.getLineHandle(where.line), pos = where.ch - 1;
     var match = (pos >= 0 && matching[line.text.charAt(pos)]) || matching[line.text.charAt(++pos)];
@@ -26,6 +27,24 @@
     return {from: Pos(where.line, pos), to: found && found.pos,
             match: found && found.ch == match.charAt(0), forward: dir > 0};
   }
+   */
+    function findMatchingBracket(cm, where, strict/*obsolete*/, config) {
+        var line = cm.getLineHandle(where.line), pos = where.ch;
+        var match = matching[line.text.charAt(pos)];
+        if (!match) return null;
+        var dir = match.charAt(1) == ">" ? 1 : -1;
+        //if (strict && (dir > 0) != (pos == where.ch)) return null;
+        var style = cm.getTokenTypeAt(Pos(where.line, pos + 1));
+
+        var found = scanForBracket(cm, Pos(where.line, pos + (dir > 0 ? 1 : 0)),
+                                   dir, style || null, config);
+        if (found == null) return null;
+        return {from: Pos(where.line, pos),
+                to: found && found.pos,
+                match: found && found.ch == match.charAt(0),
+                forward: dir > 0};
+    }
+
 
   // bracketRegex is used to specify which type of bracket to scan
   // should be a regexp, e.g. /[[\]]/
