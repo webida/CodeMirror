@@ -465,7 +465,7 @@
   function rename(ts, cm) {
     var token = cm.getTokenAt(cm.getCursor());
     if (!/\w/.test(token.string)) showError(ts, cm, "Not at a variable");
-    dialog(cm, "New name for " + token.string, function(newName) {
+    dialog(cm, "New name for " + token.string, token.string, function(newName) {
       ts.request(cm, {type: "rename", newName: newName, fullDocs: true}, function(error, data) {
         if (error) return showError(ts, cm, error);
         applyChanges(ts, data.changes);
@@ -597,9 +597,13 @@
     return e;
   }
 
-  function dialog(cm, text, f) {
+  function dialog(cm, text, dfltText, f) {
+    if (typeof dfltText === 'function') {
+      f = dfltText;
+      dfltText = ''
+    }
     if (cm.openDialog)
-      cm.openDialog(text + ": <input type=text>", f);
+      cm.openDialog(text + ': <input type=text value="' + dfltText + '">', f);
     else
       f(prompt(text, ""));
   }
