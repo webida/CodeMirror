@@ -1,3 +1,6 @@
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"));
@@ -63,7 +66,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
       if (/[\d.]/.test(stream.peek())) {
         stream.eatWhile(/[\w.%]/);
         return ret("number", "unit");
-      } else if (stream.match(/^[^-]+-/)) {
+      } else if (stream.match(/^\w+-/)) {
         return ret("meta", "meta");
       }
     } else if (/[,+>*\/]/.test(ch)) {
@@ -176,7 +179,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     } else if (type == ":") {
       return "pseudo";
     } else if (allowNested && type == "(") {
-      return pushContext(state, stream, "params");
+      return pushContext(state, stream, "parens");
     }
     return state.context.type;
   };
@@ -191,7 +194,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
         override = "string-2";
         return "maybeprop";
       } else if (allowNested) {
-        override = stream.match(/^\s*:/, false) ? "property" : "tag";
+        override = stream.match(/^\s*:(?:\s|$)/, false) ? "property" : "tag";
         return "block";
       } else {
         override += " error";
@@ -237,6 +240,8 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
   states.parens = function(type, stream, state) {
     if (type == "{" || type == "}") return popAndPass(type, stream, state);
     if (type == ")") return popContext(state);
+    if (type == "(") return pushContext(state, stream, "parens");
+    if (type == "word") wordAsValue(stream);
     return "parens";
   };
 
@@ -312,13 +317,6 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     return "interpolation";
   };
 
-  states.params = function(type, stream, state) {
-    if (type == ")") return popContext(state);
-    if (type == "{" || type == "}") return popAndPass(type, stream, state);
-    if (type == "word") wordAsValue(stream);
-    return "params";
-  };
-
   return {
     startState: function(base) {
       return {tokenize: null,
@@ -341,10 +339,10 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     indent: function(state, textAfter) {
       var cx = state.context, ch = textAfter && textAfter.charAt(0);
       var indent = cx.indent;
-      if (cx.type == "prop" && ch == "}") cx = cx.prev;
+      if (cx.type == "prop" && (ch == "}" || ch == ")")) cx = cx.prev;
       if (cx.prev &&
           (ch == "}" && (cx.type == "block" || cx.type == "top" || cx.type == "interpolation" || cx.type == "font_face") ||
-           ch == ")" && (cx.type == "parens" || cx.type == "params" || cx.type == "media_parens") ||
+           ch == ")" && (cx.type == "parens" || cx.type == "media_parens") ||
            ch == "{" && (cx.type == "at" || cx.type == "media"))) {
         indent = cx.indent - indentUnit;
         cx = cx.prev;
@@ -434,7 +432,8 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "marker-offset", "marks", "marquee-direction", "marquee-loop",
     "marquee-play-count", "marquee-speed", "marquee-style", "max-height",
     "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index",
-    "nav-left", "nav-right", "nav-up", "opacity", "order", "orphans", "outline",
+    "nav-left", "nav-right", "nav-up", "object-fit", "object-position",
+    "opacity", "order", "orphans", "outline",
     "outline-color", "outline-offset", "outline-style", "outline-width",
     "overflow", "overflow-style", "overflow-wrap", "overflow-x", "overflow-y",
     "padding", "padding-bottom", "padding-left", "padding-right", "padding-top",
@@ -445,9 +444,9 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "region-break-before", "region-break-inside", "region-fragment",
     "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness",
     "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang",
-    "ruby-position", "ruby-span", "shape-inside", "shape-outside", "size",
-    "speak", "speak-as", "speak-header",
-    "speak-numeral", "speak-punctuation", "speech-rate", "src", "stress", "string-set",
+    "ruby-position", "ruby-span", "shape-image-threshold", "shape-inside", "shape-margin",
+    "shape-outside", "size", "speak", "speak-as", "speak-header",
+    "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set",
     "tab-size", "table-layout", "target", "target-name", "target-new",
     "target-position", "text-align", "text-align-last", "text-decoration",
     "text-decoration-color", "text-decoration-line", "text-decoration-skip",
@@ -477,13 +476,13 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "overflow-scrolling", "tap-highlight-color", "touch-callout", "user-focus", "user-input", "user-select"
   ], propertyKeywords = keySet(propertyKeywords_);
 
-  var nonStandardPropertyKeywords = [
+  var nonStandardPropertyKeywords_ = [
     "scrollbar-arrow-color", "scrollbar-base-color", "scrollbar-dark-shadow-color",
     "scrollbar-face-color", "scrollbar-highlight-color", "scrollbar-shadow-color",
     "scrollbar-3d-light-color", "scrollbar-track-color", "shape-inside",
     "searchfield-cancel-button", "searchfield-decoration", "searchfield-results-button",
     "searchfield-results-decoration", "zoom"
-  ], nonStandardPropertyKeywords = keySet(nonStandardPropertyKeywords);
+  ], nonStandardPropertyKeywords = keySet(nonStandardPropertyKeywords_);
 
   var colorKeywords_ = [
     "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige",
@@ -507,8 +506,8 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orange", "orangered",
     "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred",
     "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue",
-    "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon",
-    "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue",
+    "purple", "rebeccapurple", "red", "rosybrown", "royalblue", "saddlebrown",
+    "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue",
     "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan",
     "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white",
     "whitesmoke", "yellow", "yellowgreen"
@@ -607,7 +606,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
   ], fontProperties = keySet(fontProperties_);
 
   var allWords = mediaTypes_.concat(mediaFeatures_).concat(propertyKeywords_)
-    .concat(nonStandardPropertyKeywords).concat(colorKeywords_).concat(valueKeywords_);
+    .concat(nonStandardPropertyKeywords_).concat(colorKeywords_).concat(valueKeywords_);
   CodeMirror.registerHelper("hintWords", "css", allWords);
 
   function tokenCComment(stream, state) {
@@ -677,7 +676,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
         }
       },
       ":": function(stream) {
-        if (stream.match(/\s*{/))
+        if (stream.match(/\s*\{/))
           return [null, "{"];
         return false;
       },
