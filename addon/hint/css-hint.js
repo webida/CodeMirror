@@ -1,3 +1,6 @@
+// CodeMirror, copyright (c) by Marijn Haverbeke and others
+// Distributed under an MIT license: http://codemirror.net/LICENSE
+
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"), require("../../mode/css/css"), require("underscore"));
@@ -17,7 +20,7 @@
     var inner = CodeMirror.innerMode(cm.getMode(), token.state);
     if (inner.mode.name != "css") return;
 
-    var word = token.string, start = token.start, end = token.end;
+    var start = token.start, end = cur.ch, word = token.string.slice(0, end - start);
     if (/[^\w$_-]/.test(word)) {
       word = ""; start = end = cur.ch;
     }
