@@ -5,7 +5,7 @@
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"), require("../../mode/css/css"), require("underscore"));
   else if (typeof define == "function" && define.amd) // AMD
-    define(["../../lib/codemirror", "../../mode/css/css", "other-lib/underscore/lodash.min"], mod);
+    define(["../../lib/codemirror", "../../mode/css/css", "external/lodash/lodash.min"], mod);
   else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
