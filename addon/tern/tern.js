@@ -60,6 +60,7 @@
     var plugins = this.options.plugins || (this.options.plugins = {});
     var tern = this.options.tern || tern;
     if (!plugins.doc_comment) plugins.doc_comment = true;
+    this.docs = Object.create(null);
     if (this.options.server) {
       this.server = this.options.server;
     } else if (this.options.useWorker) {
@@ -72,7 +73,6 @@
         plugins: plugins
       });
     }
-    this.docs = Object.create(null);
     this.trackChange = function(doc, change) { trackChange(self, doc, change); };
 
     this.cachedArgHints = null;
@@ -131,6 +131,8 @@
       var self = this;
       var doc = findDoc(this, cm.getDoc());
       var request = buildRequest(this, doc, query, pos);
+      var extraOptions = request.query && this.options.queryOptions && this.options.queryOptions[request.query.type]
+      if (extraOptions) for (var prop in extraOptions) request.query[prop] = extraOptions[prop];
 
       this.server.request(request, function (error, data) {
         if (!error && self.options.responseFilter)
@@ -139,8 +141,12 @@
       });
     },
 
-    showReferences: function(cm, c) { showReferences(this, cm, c); }
-
+    destroy: function () {
+      if (this.worker) {
+        this.worker.terminate();
+        this.worker = null;
+      }
+    }
   };
 
   var Pos = CodeMirror.Pos;
@@ -223,7 +229,7 @@
         var completion = data.completions[i], className = typeToIcon(completion.type);
         if (data.guess) className += " " + cls + "guess";
         completions.push({text: completion.name + after,
-                          displayText: completion.name,
+                          displayText: completion.displayName || completion.name,
                           className: className,
                           data: completion});
       }
@@ -268,12 +274,12 @@
           tip.appendChild(document.createTextNode(" ��" + data.doc));
         if (data.url) {
           tip.appendChild(document.createTextNode(" "));
-          var docsBtn = elt("a", null, "[docs]");
-          docsBtn.target = "_blank";
-          tip.appendChild(docsBtn).href = data.url;
+          var child = tip.appendChild(elt("a", null, "[docs]"));
+          child.href = data.url;
+          child.target = "_blank";
         }
       }
-      tempTooltip(cm, tip);
+      tempTooltip(cm, tip, ts);
       if (c) c();
     }, pos);
   }
@@ -468,8 +474,8 @@
 
   function atInterestingExpression(cm) {
     var pos = cm.getCursor("end"), tok = cm.getTokenAt(pos);
-    if (tok.start < pos.ch && (tok.type == "comment" || tok.type == "string")) return false;
-    return /\w/.test(cm.getLine(pos.line).slice(Math.max(pos.ch - 1, 0), pos.ch + 1));
+    if (tok.start < pos.ch && tok.type == "comment") return false;
+    return /[\w)\]]/.test(cm.getLine(pos.line).slice(Math.max(pos.ch - 1, 0), pos.ch + 1));
   }
 
   // Variable renaming
@@ -490,11 +496,12 @@
     ts.request(cm, {type: "refs"}, function(error, data) {
       if (error) return showError(ts, cm, error);
       var ranges = [], cur = 0;
+      var curPos = cm.getCursor();
       for (var i = 0; i < data.refs.length; i++) {
         var ref = data.refs[i];
         if (ref.file == name) {
           ranges.push({anchor: ref.start, head: ref.end});
-          if (cmpPos(cur, ref.start) >= 0 && cmpPos(cur, ref.end) <= 0)
+          if (cmpPos(curPos, ref.start) >= 0 && cmpPos(curPos, ref.end) <= 0)
             cur = ranges.length - 1;
         }
       }
@@ -630,16 +637,34 @@
 
   // Tooltips
 
-  function tempTooltip(cm, content) {
+  function tempTooltip(cm, content, ts) {
+    if (cm.state.ternTooltip) remove(cm.state.ternTooltip);
     var where = cm.cursorCoords();
-    var tip = makeTooltip(where.right + 1, where.bottom, content);
+    var tip = cm.state.ternTooltip = makeTooltip(where.right + 1, where.bottom, content);
+    function maybeClear() {
+      old = true;
+      if (!mouseOnTip) clear();
+    }
     function clear() {
+      cm.state.ternTooltip = null;
       if (!tip.parentNode) return;
       cm.off("cursorActivity", clear);
+      cm.off('blur', clear);
+      cm.off('scroll', clear);
       fadeOut(tip);
     }
-    setTimeout(clear, 1700);
+    var mouseOnTip = false, old = false;
+    CodeMirror.on(tip, "mousemove", function() { mouseOnTip = true; });
+    CodeMirror.on(tip, "mouseout", function(e) {
+      if (!CodeMirror.contains(tip, e.relatedTarget || e.toElement)) {
+        if (old) clear();
+        else mouseOnTip = false;
+      }
+    });
+    setTimeout(maybeClear, ts.options.hintDelay ? ts.options.hintDelay : 1700);
     cm.on("cursorActivity", clear);
+    cm.on('blur', clear);
+    cm.on('scroll', clear);
   }
 
   function makeTooltip(x, y, content) {
@@ -664,7 +689,7 @@
     if (ts.options.showError)
       ts.options.showError(cm, msg);
     else
-      tempTooltip(cm, String(msg));
+      tempTooltip(cm, String(msg), ts);
   }
 
   function closeArgHints(ts) {
@@ -680,7 +705,7 @@
   // Worker wrapper
 
   function WorkerServer(ts) {
-    var worker = new Worker(ts.options.workerScript);
+    var worker = ts.worker = new Worker(ts.options.workerScript);
     worker.postMessage({type: "init",
                         defs: ts.options.defs,
                         plugins: ts.options.plugins,
