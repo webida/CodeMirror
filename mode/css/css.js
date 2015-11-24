@@ -90,7 +90,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
                (ch == "d" && stream.match("omain(")) ||
                ((ch == "a" || ch =="A") && stream.match("lpha(")) ||
                (ch == "l" && stream.match("inear-gradient(")) ||
-               (ch == "e" && stream.match("xpression("))
+               (ch == "e" && stream.match("xpression(")) ||
                (ch == "r" && stream.match("egexp("))) {
       stream.backUp(1);
       state.tokenize = tokenParenthesized;
@@ -694,7 +694,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     "var", "vertical", "vertical-text", "visible", "visibleFill", "visiblePainted",
     "visibleStroke", "visual", "w-resize", "wait", "wave", "wider",
     "window", "windowframe", "windowtext", "words", "wrap", "wrap-reverse", "x-large", "x-small", "xor",
-    "xx-large", "xx-small"
+    "xx-large", "xx-small",
     // webida added
     "touch"
   ], valueKeywords = keySet(valueKeywords_);
